@@ -131,7 +131,7 @@ export default function ProductDetail() {
 
   return (
     <SafeAreaView
-      className="flex-1 bg-[#C6C3BF]"
+      className="flex-1 bg-[#e0d3c3]"
       style={styles.container}
       // contentContainerStyle={{ paddingBottom: 60 }}
     >
@@ -150,7 +150,7 @@ export default function ProductDetail() {
             {
               backgroundColor: wishlisted.includes(product.id)
                 ? "rgb(236, 72, 153)"
-                : "[#D9D9D9]",
+                : "#D9D9D9",
             },
           ]}
         >
@@ -216,7 +216,7 @@ export default function ProductDetail() {
                 {
                   backgroundColor: wishlisted.includes(prod.id)
                     ? "rgb(236, 72, 153)"
-                    : "[#D9D9D9]",
+                    : "#D9D9D9",
                 },
               ]}
             >

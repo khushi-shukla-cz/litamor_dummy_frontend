@@ -6,13 +6,13 @@ import {
   FlatList,
   Image,
   ImageBackground,
-  Modal,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useWishlist } from "./hooks/useWishlist";
 
@@ -120,7 +120,7 @@ export default function GiftStoreScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#C6C3BF]">
+    <SafeAreaView className="flex-1 bg-[#e0d3c3]">
       <ScrollView
         className="flex-1 px-4 pb-30"
         contentContainerStyle={{ paddingBottom: 60 }}
@@ -137,7 +137,7 @@ export default function GiftStoreScreen() {
 
         {/* Search Bar */}
         <View className="flex-row items-center  gap-1 justify-between">
-          <View className="flex-1 flex-row items-center bg-gray-500 rounded-xl px-4 py-3 mt-4">
+          <View className="flex-1 flex-row items-center bg-[#444444] rounded-xl px-4 py-3 mt-4">
             <Feather name="search" size={20} color="white" className="mr-2" />
             <TextInput
               value={search}
@@ -150,7 +150,7 @@ export default function GiftStoreScreen() {
           </View>
 
           <TouchableOpacity onPress={() => setFilterVisible(true)}>
-            <View className="gap-1 rounded-xl bg-gray-500 px-4 py-4 mt-4 items-center  ">
+            <View className="gap-1 rounded-xl bg-[#444444] px-4 py-4 mt-4 items-center  ">
               <View className="h-0.5 w-5 bg-white rounded-full" />
               <View className="h-0.5 w-4 bg-white rounded-full" />
               <View className="h-0.5 w-3 bg-white rounded-full" />
@@ -199,7 +199,7 @@ export default function GiftStoreScreen() {
                   console.log(`Category: ${cat} selected`);
                 }}
                 className={`py-2 rounded-xl px-6 border border-gray-400 mr-2 mb-2 items-center ${
-                  cat === selectedCategory ? "bg-gray-600" : "bg-gray-50"
+                  cat === selectedCategory ? "bg-[#444444]" : "bg-gray-50"
                 }`}
               >
                 <Text
@@ -271,24 +271,29 @@ export default function GiftStoreScreen() {
 
       {/* Filter Modal */}
       <Modal
-        visible={filterVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setFilterVisible(false)}
+        isVisible={filterVisible}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        animationInTiming={500}
+        animationOutTiming={500}
+        backdropOpacity={0}
+        style={{ justifyContent: "flex-end", margin: 0 }}
+        onBackdropPress={() => setFilterVisible(false)}
       >
         <View
           style={{
             flex: 1,
             backgroundColor: "rgba(0,0,0,0.5)",
-            justifyContent: "center",
+            justifyContent: "flex-end",
             alignItems: "center",
           }}
         >
           <View
             style={{
-              width: "80%",
+              width: "100%",
               backgroundColor: "#fff",
-              borderRadius: 20,
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
               padding: 20,
             }}
           >
