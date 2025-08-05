@@ -86,10 +86,10 @@ interface TabIconProps {
 
 const TabIcon = ({ name, label, isFocused, onPress }: TabIconProps) => (
   <TouchableOpacity onPress={onPress} className="items-center p-2">
-    <Feather name={name} size={24} color={isFocused ? "#fff" : "#f9fafb"} />
+    <Feather name={name} size={24} color={isFocused ? "#ffffff" : "#C6C3BF"} />
     <Text
       className={`text-xs mt-1 ${
-        isFocused ? "text-white font-bold" : "text-gray-50 font-semibold"
+        isFocused ? "text-white font-bold" : "text-[#C6C3BF] font-semibold"
       }`}
     >
       {label}
@@ -120,8 +120,11 @@ export default function GiftStoreScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#dcdbd9]">
-      <ScrollView className="flex-1 px-4 pb-20">
+    <SafeAreaView className="flex-1 bg-[#C6C3BF]">
+      <ScrollView
+        className="flex-1 px-4 pb-30"
+        contentContainerStyle={{ paddingBottom: 60 }}
+      >
         {/* Header */}
         <View className="pt-2">
           <Text className="text-xl font-bold text-gray-700">
@@ -133,18 +136,25 @@ export default function GiftStoreScreen() {
         </View>
 
         {/* Search Bar */}
-        <View className="flex-row items-center bg-gray-500 rounded-xl px-4 py-3 mt-4">
-          <Feather name="search" size={20} color="white" className="mr-2" />
-          <TextInput
-            value={search}
-            onChangeText={setSearch}
-            placeholder="Search gifts..."
-            placeholderTextColor="white"
-            className="flex-1 ml-2 text-gray-200"
-            style={{ padding: 0 }}
-          />
+        <View className="flex-row items-center  gap-1 justify-between">
+          <View className="flex-1 flex-row items-center bg-gray-500 rounded-xl px-4 py-3 mt-4">
+            <Feather name="search" size={20} color="white" className="mr-2" />
+            <TextInput
+              value={search}
+              onChangeText={setSearch}
+              placeholder="Search gifts..."
+              placeholderTextColor="white"
+              className="flex-1 ml-2 text-gray-200"
+              style={{ padding: 0 }}
+            />
+          </View>
+
           <TouchableOpacity onPress={() => setFilterVisible(true)}>
-            <Feather name="filter" size={20} color="white" />
+            <View className="gap-1 rounded-xl bg-gray-500 px-4 py-4 mt-4 items-center  ">
+              <View className="h-0.5 w-5 bg-white rounded-full" />
+              <View className="h-0.5 w-4 bg-white rounded-full" />
+              <View className="h-0.5 w-3 bg-white rounded-full" />
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -235,7 +245,9 @@ export default function GiftStoreScreen() {
                 <TouchableOpacity
                   onPress={() => toggleWishlist(item.id)}
                   className={`absolute top-3 right-2 p-2 rounded-full ${
-                    wishlisted.includes(item.id) ? "bg-pink-600" : "bg-gray-600"
+                    wishlisted.includes(item.id)
+                      ? "bg-pink-600"
+                      : "bg-[#D9D9D9]"
                   }`}
                 >
                   <Feather name="heart" size={14} color="#fff" />
@@ -368,7 +380,7 @@ export default function GiftStoreScreen() {
           }}
         />
         <TabIcon
-          name="compass"
+          name="search"
           label="Explore"
           isFocused={activeTab === "Explore"}
           onPress={() => {

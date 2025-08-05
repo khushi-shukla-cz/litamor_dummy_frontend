@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useWishlist } from "../hooks/useWishlist";
 
 const PRODUCTS = [
@@ -129,7 +130,11 @@ export default function ProductDetail() {
   if (!product) return <Text>Product not found</Text>;
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView
+      className="flex-1 bg-[#C6C3BF]"
+      style={styles.container}
+      // contentContainerStyle={{ paddingBottom: 60 }}
+    >
       {/* Image */}
       <View>
         <Image
@@ -145,7 +150,7 @@ export default function ProductDetail() {
             {
               backgroundColor: wishlisted.includes(product.id)
                 ? "rgb(236, 72, 153)"
-                : "rgba(0,0,0,0.4)",
+                : "[#D9D9D9]",
             },
           ]}
         >
@@ -192,7 +197,7 @@ export default function ProductDetail() {
 
       {/* "You may also like" section */}
       <Text style={styles.suggestedTitle}>You may also like</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView showsHorizontalScrollIndicator={false} horizontal>
         {PRODUCTS.map((prod) => (
           <TouchableOpacity
             key={prod.id}
@@ -211,7 +216,7 @@ export default function ProductDetail() {
                 {
                   backgroundColor: wishlisted.includes(prod.id)
                     ? "rgb(236, 72, 153)"
-                    : "rgba(0,0,0,0.4)",
+                    : "[#D9D9D9]",
                 },
               ]}
             >
@@ -227,19 +232,19 @@ export default function ProductDetail() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#dcdbd9",
+    backgroundColor: "#C6C3BF",
     padding: 18,
   },
   mainImage: {
     width: "100%",
-    height: 300,
+    height: 240,
     borderRadius: 18,
     marginBottom: 18,
   },
@@ -305,10 +310,10 @@ const styles = StyleSheet.create({
   },
   cartButtonDisabled: {
     backgroundColor: "#ededed",
-    paddingVertical: 14,
+    paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 10,
   },
   cartButtonDisabledText: {
     color: "#999",
@@ -317,7 +322,7 @@ const styles = StyleSheet.create({
   },
   buyButton: {
     backgroundColor: "#222",
-    paddingVertical: 14,
+    paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
   },
@@ -327,7 +332,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   suggestedTitle: {
-    marginTop: 32,
+    marginTop: 24,
     fontWeight: "700",
     fontSize: 17,
     marginBottom: 10,
@@ -341,10 +346,10 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: 180,
-    height: 140,
+    height: 120,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
-    marginBottom: 6,
+    marginBottom: 10,
   },
   cardHeartIcon: {
     position: "absolute",
