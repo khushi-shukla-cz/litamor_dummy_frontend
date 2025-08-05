@@ -15,6 +15,8 @@ import {
 import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useWishlist } from "./hooks/useWishlist";
+const Rose = require("../assets/images/rose-1.jpeg");
+const Watch = require("../assets/images/watch.jpg");
 
 // Data
 const categories = [
@@ -33,7 +35,7 @@ const products = [
     price: 1400,
     originalPrice: 1600,
     category: "Trending",
-    image: require("../../assets/images/watch.jpg"),
+    image: Watch,
   },
   {
     id: "2",
@@ -41,7 +43,7 @@ const products = [
     price: 1400,
     originalPrice: 1500,
     category: "Gift card",
-    image: require("../../assets/images/rose-1.jpeg"),
+    image: Rose,
   },
   {
     id: "3",
@@ -49,7 +51,7 @@ const products = [
     price: 1400,
     originalPrice: 1800,
     category: "Birthday",
-    image: require("../../assets/images/rose-1.jpeg"),
+    image: Rose,
   },
   {
     id: "4",
@@ -57,7 +59,7 @@ const products = [
     price: 1400,
     originalPrice: 1800,
     category: "for him",
-    image: require("../../assets/images/watch.jpg"),
+    image: Watch,
   },
   {
     id: "5",
@@ -65,7 +67,7 @@ const products = [
     price: 1400,
     originalPrice: 1600,
     category: "Friends",
-    image: require("../../assets/images/watch.jpg"),
+    image: Watch,
   },
   {
     id: "6",
@@ -73,7 +75,7 @@ const products = [
     price: 1400,
     originalPrice: 1500,
     category: "Gift card",
-    image: require("../../assets/images/rose-1.jpeg"),
+    image: Rose,
   },
 ];
 
@@ -105,7 +107,7 @@ export default function GiftStoreScreen() {
   const { wishlisted, toggleWishlist } = useWishlist();
   const router = useRouter();
 
-  const bannerImage = require("../../assets/images/watch.jpg");
+    const bannerImage = Watch;
 
   const filteredProducts = products.filter((p) => {
     const matchesCategory =
@@ -120,7 +122,7 @@ export default function GiftStoreScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-[#e0d3c3]">
+    <SafeAreaView className="flex-1 bg-[#C6C3BF]">
       <ScrollView
         className="flex-1 px-4 pb-30"
         contentContainerStyle={{ paddingBottom: 60 }}
@@ -137,7 +139,7 @@ export default function GiftStoreScreen() {
 
         {/* Search Bar */}
         <View className="flex-row items-center  gap-1 justify-between">
-          <View className="flex-1 flex-row items-center bg-[#444444] rounded-xl px-4 py-3 mt-4">
+          <View className="flex-1 flex-row items-center bg-[#666666] rounded-xl px-4 py-3 mt-4">
             <Feather name="search" size={20} color="white" className="mr-2" />
             <TextInput
               value={search}
@@ -150,7 +152,7 @@ export default function GiftStoreScreen() {
           </View>
 
           <TouchableOpacity onPress={() => setFilterVisible(true)}>
-            <View className="gap-1 rounded-xl bg-[#444444] px-4 py-4 mt-4 items-center  ">
+            <View className="gap-1 rounded-xl bg-[#666666] px-4 py-4 mt-4 items-center  ">
               <View className="h-0.5 w-5 bg-white rounded-full" />
               <View className="h-0.5 w-4 bg-white rounded-full" />
               <View className="h-0.5 w-3 bg-white rounded-full" />
@@ -227,7 +229,7 @@ export default function GiftStoreScreen() {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => router.push(`/product/${item.id}`)}
+                onPress={() => router.push(`/product/${item.id}` as any)}
                 className="bg-gray-50 rounded-xl w-[48%] shadow"
               >
                 <Image

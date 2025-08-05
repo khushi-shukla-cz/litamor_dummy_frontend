@@ -202,7 +202,7 @@ export default function ProductDetail() {
           <TouchableOpacity
             key={prod.id}
             style={styles.card}
-            onPress={() => router.push(`/product/${prod.id}`)}
+            onPress={() => router.push(`/product/${prod.id}` as any)}
           >
             <Image
               source={prod.images[0]}

@@ -1,8 +1,9 @@
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import * as SplashScreen from 'expo-splash-screen';
+import '../global.css';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,6 +34,18 @@ export default function RootLayout() {
           name="index"
           options={{
             title: 'Gift Galaxy',
+          }}
+        />
+        <Stack.Screen
+          name="giftScreenHome"
+          options={{
+            title: 'Gift Store',
+          }}
+        />
+        <Stack.Screen
+          name="product/[id]"
+          options={{
+            title: 'Product Details',
           }}
         />
       </Stack>

@@ -12,3 +12,5 @@ export const useWishlist = () => {
 
   return { wishlisted, toggleWishlist };
 };
+
+export default useWishlist;
