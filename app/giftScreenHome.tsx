@@ -1,9 +1,12 @@
+// app/GiftStoreScreen.tsx
 import { Feather } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   FlatList,
   Image,
   ImageBackground,
+  Modal,
   ScrollView,
   Text,
   TextInput,
@@ -11,6 +14,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useWishlist } from "./hooks/useWishlist";
 
 // Data
 const categories = [
@@ -28,6 +32,7 @@ const products = [
     title: "Leather wallet",
     price: 1400,
     originalPrice: 1600,
+    category: "Trending",
     image: require("../../assets/images/watch.jpg"),
   },
   {
@@ -35,6 +40,7 @@ const products = [
     title: "Spa Gift Card",
     price: 1400,
     originalPrice: 1500,
+    category: "Gift card",
     image: require("../../assets/images/rose-1.jpeg"),
   },
   {
@@ -42,6 +48,7 @@ const products = [
     title: "Rose bouquet",
     price: 1400,
     originalPrice: 1800,
+    category: "Birthday",
     image: require("../../assets/images/rose-1.jpeg"),
   },
   {
@@ -49,6 +56,7 @@ const products = [
     title: "Watch",
     price: 1400,
     originalPrice: 1800,
+    category: "for him",
     image: require("../../assets/images/watch.jpg"),
   },
   {
@@ -56,6 +64,7 @@ const products = [
     title: "Leather wallet",
     price: 1400,
     originalPrice: 1600,
+    category: "Friends",
     image: require("../../assets/images/watch.jpg"),
   },
   {
@@ -63,11 +72,11 @@ const products = [
     title: "Spa Gift Card",
     price: 1400,
     originalPrice: 1500,
+    category: "Gift card",
     image: require("../../assets/images/rose-1.jpeg"),
   },
 ];
 
-// Helper components for bottom navigation
 interface TabIconProps {
   name: keyof typeof Feather.glyphMap;
   label: string;
@@ -79,7 +88,9 @@ const TabIcon = ({ name, label, isFocused, onPress }: TabIconProps) => (
   <TouchableOpacity onPress={onPress} className="items-center p-2">
     <Feather name={name} size={24} color={isFocused ? "#fff" : "#f9fafb"} />
     <Text
-      className={`text-xs mt-1 ${isFocused ? "text-white font-bold" : "text-gray-50 font-semibold"}`}
+      className={`text-xs mt-1 ${
+        isFocused ? "text-white font-bold" : "text-gray-50 font-semibold"
+      }`}
     >
       {label}
     </Text>
@@ -89,18 +100,24 @@ const TabIcon = ({ name, label, isFocused, onPress }: TabIconProps) => (
 export default function GiftStoreScreen() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [activeTab, setActiveTab] = useState("Home");
-  // Added state for the wishlist
-  const [wishlisted, setWishlisted] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
+  const [filterVisible, setFilterVisible] = useState(false);
+  const { wishlisted, toggleWishlist } = useWishlist();
+  const router = useRouter();
 
-  /// banner image
   const bannerImage = require("../../assets/images/watch.jpg");
 
-  // Function to toggle the wishlist state
-  const toggleWishlist = (id: string) => {
-    setWishlisted((prev: string[]) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
+  const filteredProducts = products.filter((p) => {
+    const matchesCategory =
+      selectedCategory === "All" ||
+      p.category?.toLowerCase() === selectedCategory.toLowerCase();
+
+    const matchesSearch = p.title
+      .toLowerCase()
+      .includes(search.trim().toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-[#dcdbd9]">
@@ -115,36 +132,33 @@ export default function GiftStoreScreen() {
           </Text>
         </View>
 
-        {/* Search */}
-        <TouchableOpacity
-          onPress={() => console.log("Search bar clicked")}
-          className="flex-row items-center bg-gray-500 rounded-xl px-4 py-3 mt-4"
-        >
-          <Feather name="search" size={20} color="white" className="mr-2 " />
+        {/* Search Bar */}
+        <View className="flex-row items-center bg-gray-500 rounded-xl px-4 py-3 mt-4">
+          <Feather name="search" size={20} color="white" className="mr-2" />
           <TextInput
+            value={search}
+            onChangeText={setSearch}
             placeholder="Search gifts..."
             placeholderTextColor="white"
             className="flex-1 ml-2 text-gray-200"
             style={{ padding: 0 }}
           />
-          <TouchableOpacity
-            onPress={() => console.log("Filter button clicked")}
-          >
+          <TouchableOpacity onPress={() => setFilterVisible(true)}>
             <Feather name="filter" size={20} color="white" />
           </TouchableOpacity>
-        </TouchableOpacity>
+        </View>
 
         {/* Banner */}
         <TouchableOpacity
           onPress={() => console.log("Banner clicked")}
-          className="mt-4 rounded-2xl overflow-hidden h-40 "
+          className="mt-4 rounded-2xl overflow-hidden h-40"
         >
           <ImageBackground
             source={bannerImage}
             className="flex-1 justify-center px-1"
             resizeMode="cover"
           >
-            <View className=" p-4 rounded-lg">
+            <View className="p-4 rounded-lg">
               <Text className="text-gray-50 text-xl font-2xl">Super Sale</Text>
               <Text className="text-gray-50 text-xl">Discount</Text>
               <Text className="text-gray-50 text-2xl ">Up to 50%</Text>
@@ -174,7 +188,7 @@ export default function GiftStoreScreen() {
                   setSelectedCategory(cat);
                   console.log(`Category: ${cat} selected`);
                 }}
-                className={` py-2 rounded-xl px-6  border  border-gray-400 mr-2 mb-2 items-center ${
+                className={`py-2 rounded-xl px-6 border border-gray-400 mr-2 mb-2 items-center ${
                   cat === selectedCategory ? "bg-gray-600" : "bg-gray-50"
                 }`}
               >
@@ -191,9 +205,9 @@ export default function GiftStoreScreen() {
         </View>
 
         {/* Product Grid */}
-        <View className="mt-4 ">
+        <View className="mt-4">
           <FlatList
-            data={products}
+            data={filteredProducts}
             numColumns={2}
             scrollEnabled={false}
             columnWrapperStyle={{
@@ -203,7 +217,7 @@ export default function GiftStoreScreen() {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => console.log(`Product: ${item.title} clicked`)}
+                onPress={() => router.push(`/product/${item.id}`)}
                 className="bg-gray-50 rounded-xl w-[48%] shadow"
               >
                 <Image
@@ -220,7 +234,9 @@ export default function GiftStoreScreen() {
                 {/* Heart Icon with Wishlist Logic */}
                 <TouchableOpacity
                   onPress={() => toggleWishlist(item.id)}
-                  className={`absolute top-3 right-2 p-2 rounded-full ${wishlisted.includes(item.id) ? "bg-pink-600" : "bg-[#dcdbd9]"}`}
+                  className={`absolute top-3 right-2 p-2 rounded-full ${
+                    wishlisted.includes(item.id) ? "bg-pink-600" : "bg-gray-600"
+                  }`}
                 >
                   <Feather name="heart" size={14} color="#fff" />
                 </TouchableOpacity>
@@ -240,6 +256,105 @@ export default function GiftStoreScreen() {
           />
         </View>
       </ScrollView>
+
+      {/* Filter Modal */}
+      <Modal
+        visible={filterVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setFilterVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              backgroundColor: "#fff",
+              borderRadius: 20,
+              padding: 20,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 15,
+              }}
+            >
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                Filter Options
+              </Text>
+              <TouchableOpacity
+                onPress={() => setFilterVisible(false)}
+                style={{
+                  backgroundColor: "#ef4444",
+                  borderRadius: 50,
+                  padding: 5,
+                }}
+              >
+                <Feather name="x" size={16} color="#fff" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Example filter controls */}
+            <Text style={{ marginBottom: 10, fontWeight: "600" }}>
+              Select Category:
+            </Text>
+            {categories.map((cat) => (
+              <TouchableOpacity
+                key={cat}
+                onPress={() => {
+                  setSelectedCategory(cat);
+                  setFilterVisible(false);
+                }}
+                style={{
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  marginBottom: 10,
+                  backgroundColor:
+                    selectedCategory === cat ? "#4B5563" : "#E5E7EB",
+                  borderRadius: 8,
+                }}
+              >
+                <Text
+                  style={{
+                    color: selectedCategory === cat ? "#F9FAFB" : "#374151",
+                    fontWeight: "500",
+                  }}
+                >
+                  {cat}
+                </Text>
+              </TouchableOpacity>
+            ))}
+
+            <TouchableOpacity
+              style={{
+                marginTop: 20,
+                backgroundColor: "#2563EB",
+                paddingVertical: 10,
+                borderRadius: 8,
+                alignItems: "center",
+              }}
+              onPress={() => {
+                setSelectedCategory("All");
+                setSearch("");
+                setFilterVisible(false);
+              }}
+            >
+              <Text style={{ color: "#fff", fontWeight: "700" }}>
+                Reset Filters
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Bottom Navigation */}
       <View className="absolute bottom-0 left-0 right-0 bg-[#444444] flex-row justify-around items-center py-1 border-gray-700">
