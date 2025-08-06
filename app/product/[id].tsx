@@ -1,4 +1,5 @@
 import { Feather } from "@expo/vector-icons";
+import Icon from '@expo/vector-icons/MaterialIcons';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -125,16 +126,13 @@ export default function ProductDetail() {
             originalPrice: product.originalPrice,
             image: product.images[currentImageIndex],
           })}
-          style={[
-            styles.heartIcon,
-            {
-              backgroundColor: wishlisted.includes(product.id)
-                ? "rgb(236, 72, 153)"
-                : "#D9D9D9",
-            },
-          ]}
+          style={styles.heartIcon}
         >
-          <Feather name="heart" size={20} color="#fff" />
+          <Icon
+            name={wishlisted.includes(product.id) ? 'favorite' : 'favorite-border'}
+            size={20}
+            color={wishlisted.includes(product.id) ? '#444241' : '#666'}
+          />
         </TouchableOpacity>
 
         {/* Image Navigation Controls */}
@@ -195,25 +193,22 @@ export default function ProductDetail() {
               style={styles.cardImage}
               resizeMode="cover"
             />
-                         <TouchableOpacity
-               onPress={() => toggleWishlist({
-                 id: prod.id,
-                 name: prod.title,
-                 price: prod.price,
-                 originalPrice: prod.originalPrice,
-                 image: prod.images[0],
-               })}
-               style={[
-                 styles.cardHeartIcon,
-                 {
-                   backgroundColor: wishlisted.includes(prod.id)
-                     ? "rgb(236, 72, 153)"
-                     : "#D9D9D9",
-                 },
-               ]}
-             >
-               <Feather name="heart" size={20} color="#fff" />
-             </TouchableOpacity>
+                                                   <TouchableOpacity
+                onPress={() => toggleWishlist({
+                  id: prod.id,
+                  name: prod.title,
+                  price: prod.price,
+                  originalPrice: prod.originalPrice,
+                  image: prod.images[0],
+                })}
+                style={styles.cardHeartIcon}
+              >
+                <Icon
+                  name={wishlisted.includes(prod.id) ? 'favorite' : 'favorite-border'}
+                  size={20}
+                  color={wishlisted.includes(prod.id) ? '#444241' : '#666'}
+                />
+              </TouchableOpacity>
             <Text style={styles.cardTitle}>{prod.title}</Text>
             <View style={styles.cardPriceRow}>
               <Text style={styles.cardPrice}>₹{prod.price}</Text>
@@ -336,10 +331,19 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     position: "absolute",
-    top: 10,
-    right: 10,
-    padding: 7,
-    borderRadius: 999,
+    top: 12,
+    right: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 20,
+    padding: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   imageControls: {
     flexDirection: "row",
@@ -451,10 +455,19 @@ const styles = StyleSheet.create({
   },
   cardHeartIcon: {
     position: "absolute",
-    top: 8,
-    right: 10,
-    padding: 5,
-    borderRadius: 999,
+    top: 12,
+    right: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 20,
+    padding: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   cardTitle: {
     fontSize: 14,

@@ -1,6 +1,7 @@
-import Feather from '@expo/vector-icons/Feather';
 import Icon from '@expo/vector-icons/MaterialIcons';
+import React from 'react';
 import { Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import BottomNavigation from '../components/bottomNavigation';
 import { useWishlistContext } from './context/WishlistContext';
 
 type GiftItem = {
@@ -14,6 +15,7 @@ type GiftItem = {
 
 const SavedGiftsScreen = () => {
     const { wishlistItems, toggleWishlist, isWishlisted } = useWishlistContext();
+    const [activeTab, setActiveTab] = React.useState("Home");
 
     const toggleFavorite = (item: GiftItem) => {
         toggleWishlist({
@@ -96,24 +98,10 @@ const SavedGiftsScreen = () => {
             </ScrollView>
 
             {/* Bottom Navigation */}
-            <View style={styles.bottomNavigation}>
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#FFFFFF" />
-                    <Text style={[styles.navText, styles.inactiveNavText]}>Home</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="search" size={24} color="#666" />
-                    <Text style={[styles.navText, styles.inactiveNavText]}>Explore</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}>
-                    <Feather name="message-circle" size={24} color="#666" />
-                    <Text style={[styles.navText, styles.inactiveNavText]}>Message</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="person-outline" size={24} color="#666" />
-                    <Text style={[styles.navText, styles.inactiveNavText]}>Profile</Text>
-                </TouchableOpacity>
-            </View>
+            <BottomNavigation 
+                activeTab={activeTab} 
+                onTabPress={(tabName: string) => setActiveTab(tabName)} 
+            />
         </SafeAreaView>
     );
 };
@@ -240,31 +228,7 @@ const styles = StyleSheet.create({
         color: '#616161',
         textDecorationLine: 'line-through',
     },
-    bottomNavigation: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        flexDirection: 'row',
-        backgroundColor: '#444444',
-        paddingVertical: 12,
-        paddingBottom: 24,
-        height: 85.2,
-    },
-    navItem: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    navText: {
-        fontSize: 12,
-        color: '#FFF',
-        marginTop: 4,
-        fontWeight: '500',
-    },
-    inactiveNavText: {
-        color: '#999',
-    },
+
 });
 
 export default SavedGiftsScreen;
