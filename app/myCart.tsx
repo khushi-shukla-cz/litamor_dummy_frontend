@@ -1,8 +1,8 @@
-import Feather from '@expo/vector-icons/Feather';
 import Icon from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native';
+import BottomNavigation from '../components/bottomNavigation';
 import { useCartContext } from './context/CartContext';
 
 type CartItemType = {
@@ -17,6 +17,7 @@ type CartItemType = {
 const ShoppingCart = () => {
     const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCartContext();
     const [couponCode, setCouponCode] = useState('');
+    const [activeTab, setActiveTab] = React.useState("Home");
     const router = useRouter();
 
     const subtotal = getCartTotal();
@@ -130,28 +131,10 @@ const ShoppingCart = () => {
 
 
             {/* Bottom Navigation */}
-            <View style={styles.bottomNav}>
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home-filled" size={24} color="#FFFFFF" />
-                    <Text style={[styles.navLabel, { color: '#FFFFFF' }]}>Home</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="search" size={24} color="#666" />
-                    <Text style={[styles.navLabel, { color: '#666' }]}>Explore</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.navItem}>
-                    <Feather name="message-circle" size={24} color="#666" />
-
-                    <Text style={[styles.navLabel, { color: '#666' }]}>Message</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="person-outline" size={24} color="#666" />
-                    <Text style={[styles.navLabel, { color: '#666' }]}>Profile</Text>
-                </TouchableOpacity>
-            </View>
+            <BottomNavigation 
+                activeTab={activeTab} 
+                onTabPress={(tabName: string) => setActiveTab(tabName)} 
+            />
 
         </SafeAreaView>
     );
@@ -394,24 +377,6 @@ const styles = StyleSheet.create({
     checkoutButtonText: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#fff',
-    },
-    bottomNav: {
-        flexDirection: 'row',
-        backgroundColor: '#333',
-        paddingVertical: 10,
-    },
-    navItem: {
-        flex: 1,
-        alignItems: 'center',
-        paddingVertical: 5,
-    },
-    navIcon: {
-        fontSize: 20,
-        marginBottom: 3,
-    },
-    navLabel: {
-        fontSize: 12,
         color: '#fff',
     },
 });
