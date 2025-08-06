@@ -4,6 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import '../global.css';
+import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -17,9 +19,10 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <>
-      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <Stack
+    <CartProvider>
+      <WishlistProvider>
+        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+        <Stack
         screenOptions={{
           headerStyle: {
             backgroundColor: colorScheme === 'dark' ? '#000' : '#fff',
@@ -33,22 +36,35 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            title: 'Gift Galaxy',
+            headerShown: false,
           }}
         />
         <Stack.Screen
           name="giftScreenHome"
           options={{
-            title: 'Gift Store',
+            headerShown: false,
           }}
         />
         <Stack.Screen
           name="product/[id]"
           options={{
-            title: 'Product Details',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="myCart"
+            options={{
+              headerShown: false,
+            }}
+        />
+        <Stack.Screen
+          name="savedGifts"
+          options={{
+            headerShown: false,
           }}
         />
       </Stack>
-    </>
+      </WishlistProvider>
+    </CartProvider>
   );
 } 
