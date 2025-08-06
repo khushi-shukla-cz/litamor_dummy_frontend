@@ -201,7 +201,7 @@ export default function GiftStoreScreen() {
                   console.log(`Category: ${cat} selected`);
                 }}
                 className={`py-2 rounded-xl px-6 border border-gray-400 mr-2 mb-2 items-center ${
-                  cat === selectedCategory ? "bg-[#444444]" : "bg-gray-50"
+                  cat === selectedCategory ? "bg-[#666666]" : "bg-gray-50"
                 }`}
               >
                 <Text
