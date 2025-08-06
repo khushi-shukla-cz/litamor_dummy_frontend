@@ -1,16 +1,16 @@
 import { Feather } from "@expo/vector-icons";
+import Icon from '@expo/vector-icons/MaterialIcons';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useWishlist } from "../hooks/useWishlist";
+import LeatherWallet from "../../assets/images/leather-wallet.png";
+import Rose from "../../assets/images/rose-bouqet.png";
+import SpaCard from "../../assets/images/spa-card.png";
+import Watch from "../../assets/images/watch.jpg";
+import { useCartContext } from "../context/CartContext";
+import { useWishlistContext } from "../context/WishlistContext";
 
 const PRODUCTS = [
   {
@@ -18,84 +18,42 @@ const PRODUCTS = [
     title: "Leather wallet",
     price: 1400,
     originalPrice: 1600,
-    images: [
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-    ],
+    images: [LeatherWallet, Rose, SpaCard],
   },
   {
     id: "2",
     title: "Spa Gift Card",
     price: 1400,
     originalPrice: 1500,
-    images: [
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-    ],
+    images: [SpaCard, Watch, Rose ],
   },
   {
     id: "3",
     title: "Rose bouquet",
     price: 1400,
     originalPrice: 1800,
-    images: [
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-    ],
+    images: [Rose, SpaCard, LeatherWallet],
   },
   {
     id: "4",
     title: "Watch",
     price: 1400,
     originalPrice: 1800,
-    images: [
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-    ],
+    images: [Watch, LeatherWallet, SpaCard],
   },
   {
     id: "5",
     title: "Leather wallet",
     price: 1400,
     originalPrice: 1600,
-    images: [
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-    ],
+    images: [LeatherWallet, SpaCard, Rose],
   },
   {
     id: "6",
     title: "Spa Gift Card",
     price: 1400,
     originalPrice: 1500,
-    images: [
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-      require("../../assets/images/watch.jpg"),
-      require("../../assets/images/rose-1.jpeg"),
-    ],
+    images: [SpaCard , Rose, SpaCard],
   },
 ];
 
@@ -105,7 +63,10 @@ export default function ProductDetail() {
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { wishlisted, toggleWishlist } = useWishlist();
+  const [showBuyNowPopup, setShowBuyNowPopup] = useState(false);
+  const [showAddToCartPopup, setShowAddToCartPopup] = useState(false);
+  const { wishlisted, toggleWishlist } = useWishlistContext();
+  const { addToCart } = useCartContext();
 
   const handleIncrement = () => setQuantity((prev) => prev + 1);
   const handleDecrement = () => {
@@ -127,6 +88,20 @@ export default function ProductDetail() {
     );
   };
 
+  const handleAddToCart = () => {
+    if (!product) return;
+    
+    addToCart({
+      id: product.id,
+      name: product.title,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      image: product.images[currentImageIndex],
+    });
+    
+    setShowAddToCartPopup(true);
+  };
+
   if (!product) return <Text>Product not found</Text>;
 
   return (
@@ -144,17 +119,20 @@ export default function ProductDetail() {
         />
         {/* Wishlist Icon */}
         <TouchableOpacity
-          onPress={() => toggleWishlist(product.id)}
-          style={[
-            styles.heartIcon,
-            {
-              backgroundColor: wishlisted.includes(product.id)
-                ? "rgb(236, 72, 153)"
-                : "#D9D9D9",
-            },
-          ]}
+          onPress={() => toggleWishlist({
+            id: product.id,
+            name: product.title,
+            price: product.price,
+            originalPrice: product.originalPrice,
+            image: product.images[currentImageIndex],
+          })}
+          style={styles.heartIcon}
         >
-          <Feather name="heart" size={20} color="#fff" />
+          <Icon
+            name={wishlisted.includes(product.id) ? 'favorite' : 'favorite-border'}
+            size={20}
+            color={wishlisted.includes(product.id) ? '#444241' : '#666'}
+          />
         </TouchableOpacity>
 
         {/* Image Navigation Controls */}
@@ -188,10 +166,16 @@ export default function ProductDetail() {
         </TouchableOpacity>
       </View>
       {/* Action Buttons */}
-      <TouchableOpacity disabled style={styles.cartButtonDisabled}>
-        <Text style={styles.cartButtonDisabledText}>Add to cart</Text>
+      <TouchableOpacity 
+        style={styles.addToCartButton}
+        onPress={handleAddToCart}
+      >
+        <Text style={styles.addToCartButtonText}>Add to cart</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.buyButton}>
+      <TouchableOpacity 
+        style={styles.buyButton}
+        onPress={() => setShowBuyNowPopup(true)}
+      >
         <Text style={styles.buyButtonText}>Buy it now</Text>
       </TouchableOpacity>
 
@@ -209,19 +193,22 @@ export default function ProductDetail() {
               style={styles.cardImage}
               resizeMode="cover"
             />
-            <TouchableOpacity
-              onPress={() => toggleWishlist(prod.id)}
-              style={[
-                styles.cardHeartIcon,
-                {
-                  backgroundColor: wishlisted.includes(prod.id)
-                    ? "rgb(236, 72, 153)"
-                    : "#D9D9D9",
-                },
-              ]}
-            >
-              <Feather name="heart" size={20} color="#fff" />
-            </TouchableOpacity>
+                                                   <TouchableOpacity
+                onPress={() => toggleWishlist({
+                  id: prod.id,
+                  name: prod.title,
+                  price: prod.price,
+                  originalPrice: prod.originalPrice,
+                  image: prod.images[0],
+                })}
+                style={styles.cardHeartIcon}
+              >
+                <Icon
+                  name={wishlisted.includes(prod.id) ? 'favorite' : 'favorite-border'}
+                  size={20}
+                  color={wishlisted.includes(prod.id) ? '#444241' : '#666'}
+                />
+              </TouchableOpacity>
             <Text style={styles.cardTitle}>{prod.title}</Text>
             <View style={styles.cardPriceRow}>
               <Text style={styles.cardPrice}>₹{prod.price}</Text>
@@ -232,6 +219,100 @@ export default function ProductDetail() {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
+      {/* Buy Now Popup */}
+      <Modal
+        isVisible={showBuyNowPopup}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        animationInTiming={300}
+        animationOutTiming={300}
+        backdropOpacity={0.5}
+        style={{ justifyContent: "center", margin: 20 }}
+        onBackdropPress={() => setShowBuyNowPopup(false)}
+      >
+        <View style={styles.popupContainer}>
+          <View style={styles.popupHeader}>
+            <Text style={styles.popupTitle}>Add to Cart</Text>
+            <TouchableOpacity
+              onPress={() => setShowBuyNowPopup(false)}
+              style={styles.closeButton}
+            >
+              <Feather name="x" size={20} color="#666" />
+            </TouchableOpacity>
+          </View>
+          
+          <Text style={styles.popupMessage}>
+            Would you like to add this item to your cart?
+          </Text>
+          
+          <View style={styles.popupButtons}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => setShowBuyNowPopup(false)}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={styles.viewCartButton}
+              onPress={() => {
+                setShowBuyNowPopup(false);
+                router.push('/myCart');
+              }}
+            >
+              <Text style={styles.viewCartButtonText}>View Cart</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Add to Cart Popup */}
+      <Modal
+        isVisible={showAddToCartPopup}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        animationInTiming={300}
+        animationOutTiming={300}
+        backdropOpacity={0.5}
+        style={{ justifyContent: "center", margin: 20 }}
+        onBackdropPress={() => setShowAddToCartPopup(false)}
+      >
+        <View style={styles.popupContainer}>
+          <View style={styles.popupHeader}>
+            <Text style={styles.popupTitle}>Added to Cart!</Text>
+            <TouchableOpacity
+              onPress={() => setShowAddToCartPopup(false)}
+              style={styles.closeButton}
+            >
+              <Feather name="x" size={20} color="#666" />
+            </TouchableOpacity>
+          </View>
+          
+          <Text style={styles.popupMessage}>
+            {product?.title} has been added to your cart.
+          </Text>
+          
+          <View style={styles.popupButtons}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => setShowAddToCartPopup(false)}
+            >
+              <Text style={styles.cancelButtonText}>Continue Shopping</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={styles.viewCartButton}
+              onPress={() => {
+                setShowAddToCartPopup(false);
+                router.push('/myCart');
+              }}
+            >
+              <Text style={styles.viewCartButtonText}>View Cart</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -250,10 +331,19 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     position: "absolute",
-    top: 10,
-    right: 10,
-    padding: 7,
-    borderRadius: 999,
+    top: 12,
+    right: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 20,
+    padding: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   imageControls: {
     flexDirection: "row",
@@ -320,14 +410,26 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
   },
+  addToCartButton: {
+    backgroundColor: "#D9D9D9",
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  addToCartButtonText: {
+    color: "#666666",
+    fontWeight: "600",
+    fontSize: 16,
+  },
   buyButton: {
-    backgroundColor: "#222",
+    backgroundColor: "#666666",
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
   },
   buyButtonText: {
-    color: "#fff",
+    color: "#E6E6E6",
     fontWeight: "600",
     fontSize: 16,
   },
@@ -353,10 +455,19 @@ const styles = StyleSheet.create({
   },
   cardHeartIcon: {
     position: "absolute",
-    top: 8,
-    right: 10,
-    padding: 5,
-    borderRadius: 999,
+    top: 12,
+    right: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 20,
+    padding: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   cardTitle: {
     fontSize: 14,
@@ -382,5 +493,68 @@ const styles = StyleSheet.create({
     color: "#999",
     textDecorationLine: "line-through",
     marginLeft: 8,
+  },
+  // Popup styles
+  popupContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  popupHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  popupTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  closeButton: {
+    padding: 4,
+  },
+  popupMessage: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 20,
+    lineHeight: 22,
+  },
+  popupButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  cancelButton: {
+    flex: 1,
+    backgroundColor: "#f3f4f6",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  cancelButtonText: {
+    color: "#666",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  viewCartButton: {
+    flex: 1,
+    backgroundColor: "#222",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  viewCartButtonText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
   },
 });

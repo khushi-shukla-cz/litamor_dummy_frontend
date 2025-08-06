@@ -1,20 +1,11 @@
-import { useState } from 'react';
-import {
-    Image,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '@expo/vector-icons/MaterialIcons';
+import React from 'react';
+import { Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import BottomNavigation from '../components/bottomNavigation';
+import { useWishlistContext } from './context/WishlistContext';
 
 type GiftItem = {
-    id: number;
+    id: string;
     name: string;
     price: number;
     originalPrice: number;
@@ -23,84 +14,22 @@ type GiftItem = {
 };
 
 const SavedGiftsScreen = () => {
-    const [savedItems, setSavedItems] = useState([
-        {
-            id: 1,
-            name: 'Leather wallet',
-            price: 1400,
-            originalPrice: 1800,
-            image: require('../../../assets/images/leather-wallet.jpg'), // Replace with your image path
-            isFavorite: true,
-        },
-        {
-            id: 2,
-            name: 'Spa Gift Card',
-            price: 1400,
-            originalPrice: 1800,
-            image: require('../../../assets/images/spa-card.png'), // Replace with your image path
-            isFavorite: true,
-        },
-        {
-            id: 3,
-            name: 'Rose bouquet',
-            price: 1400,
-            originalPrice: 1800,
-            image: require('../../../assets/images/rose-bouquet.png'), // Replace with your image path
-            isFavorite: true,
-        },
-        {
-            id: 4,
-            name: 'Watch',
-            price: 1400,
-            originalPrice: 1800,
-            image: require('../../../assets/images/watch.png'), // Replace with your image path
-            isFavorite: true,
-        },
-        // Duplicate items to match the design
-        {
-            id: 5,
-            name: 'Rose bouquet',
-            price: 1400,
-            originalPrice: 1800,
-            image: require('../../../assets/images/rose-bouquet.png'),
-            isFavorite: true,
-        },
-        {
-            id: 6,
-            name: 'Watch',
-            price: 1400,
-            originalPrice: 1800,
-            image: require('../../../assets/images/watch.png'),
-            isFavorite: true,
-        },
-        {
-            id: 7,
-            name: 'Rose bouquet',
-            price: 1400,
-            originalPrice: 1800,
-            image: require('../../../assets/images/rose-bouquet.png'),
-            isFavorite: false,
-        },
-        {
-            id: 8,
-            name: 'Watch',
-            price: 1400,
-            originalPrice: 1800,
-            image: require('../../../assets/images/watch.png'),
-            isFavorite: false,
-        },
-    ]);
+    const { wishlistItems, toggleWishlist, isWishlisted } = useWishlistContext();
+    const [activeTab, setActiveTab] = React.useState("Home");
 
-    const toggleFavorite = (id: number) => {
-        setSavedItems(prevItems =>
-            prevItems.map(item =>
-                item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
-            )
-        );
+    const toggleFavorite = (item: GiftItem) => {
+        toggleWishlist({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            originalPrice: item.originalPrice,
+            image: item.image,
+        });
     };
 
-    const renderGiftCard = (item: GiftItem, index: number) => {
+    const renderGiftCard = (item: any, index: number) => {
         const isLeftCard = index % 2 === 0;
+        const isFavorite = isWishlisted(item.id);
 
         return (
             <View key={item.id} style={[styles.giftCard, isLeftCard ? styles.leftCard : styles.rightCard]}>
@@ -108,12 +37,12 @@ const SavedGiftsScreen = () => {
                     <Image source={item.image} style={styles.giftImage} />
                     <TouchableOpacity
                         style={styles.favoriteButton}
-                        onPress={() => toggleFavorite(item.id)}
+                        onPress={() => toggleFavorite(item)}
                     >
                         <Icon
-                            name={item.isFavorite ? 'favorite' : 'favorite-border'}
+                            name={isFavorite ? 'favorite' : 'favorite-border'}
                             size={20}
-                            color={item.isFavorite ? '#444241' : '#666'}
+                            color={isFavorite ? '#444241' : '#666'}
                         />
                     </TouchableOpacity>
                 </View>
@@ -130,11 +59,11 @@ const SavedGiftsScreen = () => {
 
     const renderGiftPairs = () => {
         const pairs = [];
-        for (let i = 0; i < savedItems.length; i += 2) {
+        for (let i = 0; i < wishlistItems.length; i += 2) {
             pairs.push(
                 <View key={i} style={styles.cardRow}>
-                    {renderGiftCard(savedItems[i], i)}
-                    {savedItems[i + 1] && renderGiftCard(savedItems[i + 1], i + 1)}
+                    {renderGiftCard(wishlistItems[i], i)}
+                    {wishlistItems[i + 1] && renderGiftCard(wishlistItems[i + 1], i + 1)}
                 </View>
             );
         }
@@ -169,24 +98,10 @@ const SavedGiftsScreen = () => {
             </ScrollView>
 
             {/* Bottom Navigation */}
-            <View style={styles.bottomNavigation}>
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#FFFFFF" />
-                    <Text style={[styles.navText, styles.inactiveNavText]}>Home</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="search" size={24} color="#666" />
-                    <Text style={[styles.navText, styles.inactiveNavText]}>Explore</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}>
-                    <Feather name="message-circle" size={24} color="#666" />
-                    <Text style={[styles.navText, styles.inactiveNavText]}>Message</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}>
-                    <Icon name="person-outline" size={24} color="#666" />
-                    <Text style={[styles.navText, styles.inactiveNavText]}>Profile</Text>
-                </TouchableOpacity>
-            </View>
+            <BottomNavigation 
+                activeTab={activeTab} 
+                onTabPress={(tabName: string) => setActiveTab(tabName)} 
+            />
         </SafeAreaView>
     );
 };
@@ -313,31 +228,7 @@ const styles = StyleSheet.create({
         color: '#616161',
         textDecorationLine: 'line-through',
     },
-    bottomNavigation: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        flexDirection: 'row',
-        backgroundColor: '#444444',
-        paddingVertical: 12,
-        paddingBottom: 24,
-        height: 85.2,
-    },
-    navItem: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    navText: {
-        fontSize: 12,
-        color: '#FFF',
-        marginTop: 4,
-        fontWeight: '500',
-    },
-    inactiveNavText: {
-        color: '#999',
-    },
+
 });
 
 export default SavedGiftsScreen;

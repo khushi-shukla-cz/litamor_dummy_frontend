@@ -1,22 +1,12 @@
+import Feather from '@expo/vector-icons/Feather';
+import Icon from '@expo/vector-icons/MaterialIcons';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import {
-    Image,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-
+import { Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View, } from 'react-native';
+import { useCartContext } from './context/CartContext';
 
 type CartItemType = {
-    id: number;
+    id: string;
     name: string;
     price: number;
     originalPrice: number;
@@ -25,29 +15,11 @@ type CartItemType = {
 };
 
 const ShoppingCart = () => {
-    const [items, setItems] = useState([
-        { id: 1, name: 'Rose Bouquet', price: 1400, originalPrice: 1800, quantity: 1, image: require('../../../assets/images/rose-bouquet.png') },
-        { id: 2, name: 'Spa Gift Card', price: 1400, originalPrice: 1800, quantity: 1, image: require('../../../assets/images/spa-card.png') },
-        { id: 3, name: 'Rose Bouquet', price: 1400, originalPrice: 1800, quantity: 1, image: require('../../../assets/images/rose-bouquet.png') },
-        { id: 4, name: 'Spa Gift Card', price: 1400, originalPrice: 1800, quantity: 1, image: require('../../../assets/images/spa-card.png') },
-        { id: 5, name: 'Spa Gift Card', price: 1400, originalPrice: 1800, quantity: 1, image: require('../../../assets/images/spa-card.png') },
-    ]);
-
+    const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCartContext();
     const [couponCode, setCouponCode] = useState('');
+    const router = useRouter();
 
-    const updateQuantity = (id: number, change: number) => {
-        setItems(items.map(item =>
-            item.id === id
-                ? { ...item, quantity: Math.max(1, item.quantity + change) }
-                : item
-        ));
-    };
-
-    const removeItem = (id: number) => {
-        setItems(items.filter(item => item.id !== id));
-    };
-
-    const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const subtotal = getCartTotal();
     const deliveryFee = 30;
     const total = subtotal + deliveryFee;
 
@@ -66,7 +38,7 @@ const ShoppingCart = () => {
                     <View style={styles.quantityButtonContainer}>
                         <TouchableOpacity
                             style={styles.quantityButton}
-                            onPress={() => updateQuantity(item.id, -1)}
+                            onPress={() => updateQuantity(item.id, item.quantity - 1)}
                         >
                             <Text style={styles.quantityButtonText}>-</Text>
                         </TouchableOpacity>
@@ -75,7 +47,7 @@ const ShoppingCart = () => {
 
                         <TouchableOpacity
                             style={styles.quantityButton}
-                            onPress={() => updateQuantity(item.id, 1)}
+                            onPress={() => updateQuantity(item.id, item.quantity + 1)}
                         >
                             <Text style={styles.quantityButtonText}>+</Text>
                         </TouchableOpacity>
@@ -83,7 +55,7 @@ const ShoppingCart = () => {
 
                     <TouchableOpacity
                         style={styles.removeButton}
-                        onPress={() => removeItem(item.id)}
+                        onPress={() => removeFromCart(item.id)}
                     >
                         <Text style={styles.removeText}>Remove</Text>
                     </TouchableOpacity>
@@ -94,12 +66,12 @@ const ShoppingCart = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
+            <StatusBar barStyle="dark-content" backgroundColor="#C6C3BF" />
 
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity style={styles.backButton}>
-                    <Text style={styles.backArrow}>←</Text>
+                <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+                    <Icon name="arrow-back" size={24} color="#333" />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>My Cart</Text>
             </View>
@@ -107,7 +79,7 @@ const ShoppingCart = () => {
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                 {/* Cart Items */}
                 <View style={styles.allCartItems}>
-                    {items.map(item => (
+                    {cartItems.map(item => (
                         <CartItem key={item.id} item={item} />
                     ))}
                 </View>

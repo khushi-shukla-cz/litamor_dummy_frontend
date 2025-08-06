@@ -1,32 +1,21 @@
 // app/GiftStoreScreen.tsx
 import { Feather } from "@expo/vector-icons";
+import Icon from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  FlatList,
-  Image,
-  ImageBackground,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Image, ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useWishlist } from "./hooks/useWishlist";
-const Rose = require("../assets/images/rose-1.jpeg");
-const Watch = require("../assets/images/watch.jpg");
+import LeatherWallet from "../assets/images/leather-wallet.png";
+import Rose from "../assets/images/rose-bouqet.png";
+import SpaCard from "../assets/images/spa-card.png";
+import Watch from "../assets/images/watch.jpg";
+import BottomNavigation from "../components/bottomNavigation";
+import { useCartContext } from "./context/CartContext";
+import { useWishlistContext } from "./context/WishlistContext";
 
 // Data
-const categories = [
-  "All",
-  "Friends",
-  "Trending",
-  "Birthday",
-  "Gift card",
-  "for him",
-];
+const categories = ["All", "Friends", "Trending", "Birthday", "Gift card", "for him"];
 
 const products = [
   {
@@ -35,7 +24,7 @@ const products = [
     price: 1400,
     originalPrice: 1600,
     category: "Trending",
-    image: Watch,
+    image: LeatherWallet,
   },
   {
     id: "2",
@@ -43,7 +32,7 @@ const products = [
     price: 1400,
     originalPrice: 1500,
     category: "Gift card",
-    image: Rose,
+    image: SpaCard,
   },
   {
     id: "3",
@@ -67,7 +56,7 @@ const products = [
     price: 1400,
     originalPrice: 1600,
     category: "Friends",
-    image: Watch,
+    image: LeatherWallet,
   },
   {
     id: "6",
@@ -75,36 +64,19 @@ const products = [
     price: 1400,
     originalPrice: 1500,
     category: "Gift card",
-    image: Rose,
+    image: SpaCard,
   },
 ];
 
-interface TabIconProps {
-  name: keyof typeof Feather.glyphMap;
-  label: string;
-  isFocused: boolean;
-  onPress: () => void;
-}
 
-const TabIcon = ({ name, label, isFocused, onPress }: TabIconProps) => (
-  <TouchableOpacity onPress={onPress} className="items-center p-2">
-    <Feather name={name} size={24} color={isFocused ? "#ffffff" : "#C6C3BF"} />
-    <Text
-      className={`text-xs mt-1 ${
-        isFocused ? "text-white font-bold" : "text-[#C6C3BF] font-semibold"
-      }`}
-    >
-      {label}
-    </Text>
-  </TouchableOpacity>
-);
 
 export default function GiftStoreScreen() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [activeTab, setActiveTab] = useState("Home");
   const [search, setSearch] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
-  const { wishlisted, toggleWishlist } = useWishlist();
+  const { wishlisted, toggleWishlist } = useWishlistContext();
+  const { getCartItemCount } = useCartContext();
   const router = useRouter();
 
     const bannerImage = Watch;
@@ -128,13 +100,43 @@ export default function GiftStoreScreen() {
         contentContainerStyle={{ paddingBottom: 60 }}
       >
         {/* Header */}
-        <View className="pt-2">
-          <Text className="text-xl font-bold text-gray-700">
-            Find the Perfect Gift
-          </Text>
-          <Text className="text-sm text-gray-600">
-            Skip the clichés. Go for something real.
-          </Text>
+        <View className="pt-2 flex-row justify-between items-center">
+          <View>
+            <Text className="text-xl font-bold text-gray-700">
+              Find the Perfect Gift
+            </Text>
+            <Text className="text-sm text-gray-600">
+              Skip the clichés. Go for something real.
+            </Text>
+          </View>
+          <View className="flex-row items-center gap-4">
+            <TouchableOpacity 
+              onPress={() => router.push('/savedGifts')}
+              className="relative"
+            >
+              <Feather name="heart" size={24} color="#333" />
+              {wishlisted.length > 0 && (
+                <View className="absolute -top-2 -right-2 bg-red-500 rounded-full w-5 h-5 items-center justify-center">
+                  <Text className="text-white text-xs font-bold">
+                    {wishlisted.length}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => router.push('/myCart')}
+              className="relative"
+            >
+              <Feather name="shopping-cart" size={24} color="#333" />
+              {getCartItemCount() > 0 && (
+                <View className="absolute -top-2 -right-2 bg-red-500 rounded-full w-5 h-5 items-center justify-center">
+                  <Text className="text-white text-xs font-bold">
+                    {getCartItemCount()}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Search Bar */}
@@ -201,7 +203,7 @@ export default function GiftStoreScreen() {
                   console.log(`Category: ${cat} selected`);
                 }}
                 className={`py-2 rounded-xl px-6 border border-gray-400 mr-2 mb-2 items-center ${
-                  cat === selectedCategory ? "bg-[#666666]" : "bg-gray-50"
+                  cat === selectedCategory ? "bg-[#666666]" : "bg-[#C6C3BF]"
                 }`}
               >
                 <Text
@@ -244,16 +246,37 @@ export default function GiftStoreScreen() {
                   }}
                 />
                 {/* Heart Icon with Wishlist Logic */}
-                <TouchableOpacity
-                  onPress={() => toggleWishlist(item.id)}
-                  className={`absolute top-3 right-2 p-2 rounded-full ${
-                    wishlisted.includes(item.id)
-                      ? "bg-pink-600"
-                      : "bg-[#D9D9D9]"
-                  }`}
-                >
-                  <Feather name="heart" size={14} color="#fff" />
-                </TouchableOpacity>
+                  <TouchableOpacity
+                   onPress={() => toggleWishlist({
+                     id: item.id,
+                     name: item.title,
+                     price: item.price,
+                     originalPrice: item.originalPrice,
+                     image: item.image,
+                   })}
+                   style={{
+                     position: 'absolute',
+                     top: 12,
+                     right: 12,
+                     backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                     borderRadius: 20,
+                     padding: 8,
+                     elevation: 2,
+                     shadowColor: '#000',
+                     shadowOffset: {
+                       width: 0,
+                       height: 1,
+                     },
+                     shadowOpacity: 0.2,
+                     shadowRadius: 2,
+                   }}
+                 >
+                   <Icon
+                     name={wishlisted.includes(item.id) ? 'favorite' : 'favorite-border'}
+                     size={20}
+                     color={wishlisted.includes(item.id) ? '#444241' : '#666'}
+                   />
+                 </TouchableOpacity>
                 <Text className="text-sm px-2 font-medium mt-2 text-gray-700">
                   {item.title}
                 </Text>
@@ -376,44 +399,13 @@ export default function GiftStoreScreen() {
       </Modal>
 
       {/* Bottom Navigation */}
-      <View className="absolute bottom-0 left-0 right-0 bg-[#444444] flex-row justify-around items-center py-1 border-gray-700">
-        <TabIcon
-          name="home"
-          label="Home"
-          isFocused={activeTab === "Home"}
-          onPress={() => {
-            setActiveTab("Home");
-            console.log("Nav: Home");
-          }}
-        />
-        <TabIcon
-          name="search"
-          label="Explore"
-          isFocused={activeTab === "Explore"}
-          onPress={() => {
-            setActiveTab("Explore");
-            console.log("Nav: Explore");
-          }}
-        />
-        <TabIcon
-          name="message-circle"
-          label="Message"
-          isFocused={activeTab === "Message"}
-          onPress={() => {
-            setActiveTab("Message");
-            console.log("Nav: Message");
-          }}
-        />
-        <TabIcon
-          name="user"
-          label="Profile"
-          isFocused={activeTab === "Profile"}
-          onPress={() => {
-            setActiveTab("Profile");
-            console.log("Nav: Profile");
-          }}
-        />
-      </View>
+      <BottomNavigation 
+        activeTab={activeTab} 
+        onTabPress={(tabName: string) => {
+          setActiveTab(tabName);
+          console.log(`Nav: ${tabName}`);
+        }} 
+      />
     </SafeAreaView>
   );
 }
