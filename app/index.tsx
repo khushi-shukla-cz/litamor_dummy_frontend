@@ -20,21 +20,16 @@ export default function HomePage() {
         
         {/* Message */}
         <Text className="text-4xl font-bold text-gray-900 text-center mb-6 leading-tight">
-          Choose the perfect gift
-        </Text>
-        
-        {/* Subtitle */}
-        <Text className="text-lg text-gray-600 text-center mb-16 px-6 leading-relaxed">
-          Discover amazing gifts for everyone you love
+          Lone Town
         </Text>
         
         {/* Button */}
         <TouchableOpacity 
           className="bg-white/80 backdrop-blur-sm rounded-2xl px-10 py-4 shadow-lg border border-gray-200/50"
-          onPress={() => router.push('/giftScreenHome')}
+          onPress={() => router.push('/')}
           activeOpacity={0.8}
         >
-          <Text className="text-gray-800 font-semibold text-lg text-center">Start Shopping</Text>
+          <Text className="text-gray-800 font-semibold text-lg text-center">Next</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
