@@ -58,14 +58,6 @@ const CouplesApp = () => {
             <Text style={styles.clockIcon}>🕐</Text>
             <Text style={styles.headerSubtitle}>{subtitle}</Text>
           </View>
-          {/* Add current screen name below subtitle */}
-          <View style={{ marginTop: 4 }}>
-            <Text style={{ color: '#6B7280', fontWeight: 'bold', fontSize: 14 }}>
-              {currentScreen === 'weekly' && 'Weekly'}
-              {currentScreen === 'after-submitting' && 'After Submit'}
-              {currentScreen === 'monthly' && 'Monthly'}
-            </Text>
-          </View>
         </View>
         {showHeart && (
           <View style={styles.heartContainer}>
@@ -284,7 +276,9 @@ const CouplesApp = () => {
   const AfterSubmittingScreen = () => (
     <View style={styles.screenContainer}>
       <View style={styles.greyBackground}>
-        <Header title="Week 2" subtitle="14 days" />
+        <TouchableOpacity onPress={() => setCurrentScreen('monthly')}>
+          <Header title="Week 2" subtitle="14 days" />
+        </TouchableOpacity>
         <ProgressBar 
           title="Earn 50 Quest Points"
           current={20}
@@ -422,36 +416,6 @@ const CouplesApp = () => {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        {/* Screen Navigation */}
-        <View style={styles.navigationContainer}>
-          <View style={styles.navigationButtons}>
-            <TouchableOpacity
-              onPress={() => setCurrentScreen('weekly')}
-              style={[styles.navButton, currentScreen === 'weekly' && styles.activeNavButton]}
-            >
-              <Text style={[styles.navButtonText, currentScreen === 'weekly' && styles.activeNavText]}>
-                Weekly
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setCurrentScreen('after-submitting')}
-              style={[styles.navButton, currentScreen === 'after-submitting' && styles.activeNavButton]}
-            >
-              <Text style={[styles.navButtonText, currentScreen === 'after-submitting' && styles.activeNavText]}>
-                After Submit
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setCurrentScreen('monthly')}
-              style={[styles.navButton, currentScreen === 'monthly' && styles.activeNavButton]}
-            >
-              <Text style={[styles.navButtonText, currentScreen === 'monthly' && styles.activeNavText]}>
-                Monthly
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
         <Screen />
         <StatusBar style="light" />
       </View>
@@ -496,8 +460,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   navButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     marginHorizontal: 4,
     borderRadius: 6,
   },
@@ -506,8 +470,8 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     color: 'white',
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   activeNavText: {
     color: 'black',
