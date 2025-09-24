@@ -3,31 +3,44 @@ import PopupModals from '@/components/PopupModal';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import {
-  Image,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { Image, SafeAreaView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
+
+interface Message {
+  id: number;
+  text: string;
+  time: string;
+  isSent: boolean;
+}
 
 const ChatScreen = () => {
   // Get params from Expo Router
   const { userId, userName, userAvatar, isOnline } = useLocalSearchParams();
   
-  const [showRequest, setShowRequest] = useState(true);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   const [popupType, setPopupType] = useState<'unmatch' | 'block' | 'pin' | null>(null);
+  const [message, setMessage] = useState('');
 
-  const handleYesMatch = () => {
-    setShowRequest(false);
-  };
-
-  const handleNoThanks = () => {
-    setPopupType('unmatch');
-  };
+  // Sample conversation messages
+  const messages: Message[] = [
+    {
+      id: 1,
+      text: "Sooo... do you prefer coffee ☕ or chai 🍵?",
+      time: "09:32 PM",
+      isSent: true
+    },
+    {
+      id: 2,
+      text: "Chai, always! What about you?",
+      time: "10:32 PM", 
+      isSent: false
+    },
+    {
+      id: 3,
+      text: "Haha same, we're already off to a good start 😊",
+      time: "11:32 PM",
+      isSent: true
+    }
+  ];
 
   const handleOptionsMenu = () => {
     setShowOptionsMenu(!showOptionsMenu);
@@ -57,8 +70,6 @@ const ChatScreen = () => {
   const handlePopupOkay = () => {
     setPopupType(null);
     if (popupType === 'unmatch') {
-      setShowRequest(false);
-      // Navigate back to messages
       router.back();
     }
   };
@@ -67,8 +78,16 @@ const ChatScreen = () => {
     router.back();
   };
 
+  const handleSendMessage = () => {
+    if (message.trim()) {
+      // Here you would typically send the message to your backend
+      console.log('Sending message:', message);
+      setMessage('');
+    }
+  };
+
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       <StatusBar barStyle="dark-content" />
       
       {/* Header */}
@@ -150,76 +169,57 @@ const ChatScreen = () => {
         </View>
       </View>
 
-      {/* Main Content */}
-      <View className="flex-1 bg-[#E6E6E6]" onTouchStart={() => setShowOptionsMenu(false)}>
-        {/* Chat Messages Area */}
-        <View className="flex-1 pt-4 px-4">
-          {/* Received message */}
-          <View className="mb-4">
-            <View className="bg-white rounded-2xl rounded-bl-none px-4 py-3 self-start max-w-xs">
-              <Text className="text-gray-800 text-base">
-                Wanna send me a voice note instead of typing? 🎤
-              </Text>
-            </View>
-            <Text className="text-xs text-gray-500 mt-1 self-start ml-1">10:32 PM</Text>
-          </View>
-        </View>
-
-        {/* Conditional Request Notification or Message Input */}
-        {showRequest ? (
-          /* Request Notification - Full Width */
-          <View className="bg-white rounded-t-3xl pb-20 pt-4 w-full">
-            <View className="items-center mb-8 px-4">
-              <Text className="text-black text-lg mb-4 font-medium">💌 New Chat Request from {userName || 'Sebastian'}</Text>
-              <Text className="text-gray-600 text-center text-base leading-6">
-                Do you wish to match with <Text className="font-semibold">{userName || 'Sebastian'}</Text> to continue the conversation?
-              </Text>
-            </View> 
-            
-            <View className="flex-row justify-center mb-4 px-4">
-              <TouchableOpacity 
-                className="bg-[#666666] rounded-full px-10 py-4 mr-4"
-                onPress={handleYesMatch}
+      {/* Chat Messages Area */}
+      <ScrollView 
+        className="flex-1 bg-[#E6E6E6] px-4" 
+        showsVerticalScrollIndicator={false}
+        onTouchStart={() => setShowOptionsMenu(false)}
+      >
+        <View className="py-4">
+          {messages.map((msg) => (
+            <View key={msg.id} className={`mb-4 ${msg.isSent ? 'items-end' : 'items-start'}`}>
+              <View 
+                className={`px-4 py-3 max-w-xs rounded-2xl ${
+                  msg.isSent 
+                    ? 'bg-[#666666] rounded-br-none' 
+                    : 'bg-white rounded-bl-none'
+                }`}
               >
-                <Text className="text-white text-base font-medium">Yes, Match 💕</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity 
-                className="bg-[#D9D9D9] rounded-full px-10 py-4"
-                onPress={handleNoThanks}
-              >
-                <Text className="text-gray-700 text-base font-medium">No, Thanks</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : (
-          /* Message Input Area - Shows after matching */
-          <View className="bg-[#E6E6E6] pb-20 pt-4 w-full">
-            <View className="flex-row items-center px-4">
-              <View className="flex-row items-center bg-[#F5F5F5] rounded-full px-4 py-1 flex-1 mr-3 overflow-hidden" style={{height: 55}}>
-                <TouchableOpacity className="mr-3">
-                  <Image source={require('../assets/images/customEmoji.png')} style={{ width: 24, height: 24 }} />
-                </TouchableOpacity>
-                
-                <TextInput
-                  className="flex-1 text-base text-gray-600"
-                  placeholder="Message"
-                  placeholderTextColor="#666"
-                  style={{ 
-                    paddingVertical: 8,
-                    backgroundColor: 'transparent',
-                    borderWidth: 0,
-                  }}
-                />
+                <Text className={`text-base ${msg.isSent ? 'text-white' : 'text-gray-800'}`}>
+                  {msg.text}
+                </Text>
               </View>
-              <TouchableOpacity className="bg-[#D9D9D9] rounded-full items-center justify-center mr-0" style={{ width: 52, height: 52 }}>
-                <Ionicons name="mic-outline" size={24} color="#666666" />
-              </TouchableOpacity>
+              <Text className={`text-xs text-gray-500 mt-1 ${msg.isSent ? 'mr-2' : 'ml-2'}`}>
+                {msg.time}
+              </Text>
             </View>
-          </View>
-        )}
-      </View>
+          ))}
+        </View>
+      </ScrollView>
 
+      <View className="bg-[#E6E6E6] pb-20 pt-4 w-full">
+        <View className="flex-row items-center px-4">
+          <View className="flex-row items-center bg-[#F5F5F5] rounded-full px-4 py-1 flex-1 mr-3 overflow-hidden" style={{height: 55}}>
+            <TouchableOpacity className="mr-3">
+              <Image source={require('../assets/images/customEmoji.png')} style={{ width: 24, height: 24 }} />
+            </TouchableOpacity>
+            
+            <TextInput
+              className="flex-1 text-base text-gray-600"
+              placeholder="Message"
+              placeholderTextColor="#666"
+              style={{ 
+                paddingVertical: 8,
+                backgroundColor: 'transparent',
+                borderWidth: 0,
+              }}
+            />
+          </View>
+          <TouchableOpacity className="bg-[#D9D9D9] rounded-full items-center justify-center mr-0" style={{ width: 52, height: 52 }}>
+            <Ionicons name="mic-outline" size={24} color="#666666" />
+          </TouchableOpacity>
+        </View>
+      </View>
       {/* Bottom Navigation */}
       <BottomNavigation activeTab="Message" onTabPress={(tab) => console.log(`Navigating to ${tab}`)} />
 
