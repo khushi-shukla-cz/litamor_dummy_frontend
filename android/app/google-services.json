@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "933081449704",
+    "project_id": "litscore-460a5",
+    "storage_bucket": "litscore-460a5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933081449704:android:951c7b66bcbf86e066355d",
+        "android_client_info": {
+          "package_name": "com.LitStreak"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA58DbAra84zgBQ1Pw114Z6ionn8TTzbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933081449704:android:9becc3e3af025ade66355d",
+        "android_client_info": {
+          "package_name": "com.litscore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA58DbAra84zgBQ1Pw114Z6ionn8TTzbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
