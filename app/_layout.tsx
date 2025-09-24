@@ -33,8 +33,7 @@ export default function RootLayout() {
           headerShown: false,
         }}
       />
-
-      <Stack.Screen name="Home" options={{ headerShown: false }} />
+      <Stack.Screen name="screens" options={{ headerShown: false }} />
     </Stack>
   );
 }

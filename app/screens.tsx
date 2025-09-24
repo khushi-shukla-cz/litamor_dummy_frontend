@@ -128,7 +128,7 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: "#FFFFFF" },
+  safeArea: { flex: 1, marginTop: 40, backgroundColor: "#FFFFFF" },
   container: { flex: 1, backgroundColor: "#FFFFFF" },
   toggleContainer: {
     flexDirection: "row",
