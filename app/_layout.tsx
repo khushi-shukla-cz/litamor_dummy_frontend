@@ -16,23 +16,28 @@ export default function RootLayout() {
   }, []);
 
   return (
-        <Stack
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: colorScheme === 'dark' ? '#000' : '#fff',
-          },
-          headerTintColor: colorScheme === 'dark' ? '#fff' : '#000',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colorScheme === 'dark' ? '#000' : '#fff',
+        },
+        headerTintColor: colorScheme === 'dark' ? '#fff' : '#000',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
         }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
+      />
+      {/* Hide header only for PremiumUpgrade */}
+      <Stack.Screen name="loveLetterPremium" options={{ headerShown: false }} />
+
+      {/* Hide header only for PremiumUpgrade */}
+      <Stack.Screen name="loveLetter" options={{ headerShown: false }} />
+    </Stack>
   );
 } 
