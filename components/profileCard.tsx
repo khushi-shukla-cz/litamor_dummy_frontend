@@ -1,4 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Rect } from "react-native-svg";
@@ -100,6 +101,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
   isPremium,
   onToggleExpand,
 }) => {
+  const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [promptsExpanded, setPromptsExpanded] = useState(true);
   const [interestsExpanded, setInterestsExpanded] = useState(true);
@@ -230,7 +232,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
       {/* Action Buttons */}
       <View style={styles.cardActions}>
-        <TouchableOpacity style={styles.chatButton}>
+        <TouchableOpacity style={styles.chatButton} onPress={() => router.push("/request")}>
           <Text style={styles.chatButtonText}>Start a Chat</Text>
         </TouchableOpacity>
         {isPremium && (

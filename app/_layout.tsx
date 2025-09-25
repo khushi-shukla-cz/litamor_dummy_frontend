@@ -25,14 +25,14 @@ export default function RootLayout() {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
+          headerShown: false
         }}
       >
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
+        <Stack.Screen name="index"/>
+        <Stack.Screen name="screens"/>
+        <Stack.Screen name="chat"/>
+        <Stack.Screen name="chatScreen"/>
+        <Stack.Screen name="request"/>
       </Stack>
   );
 }
