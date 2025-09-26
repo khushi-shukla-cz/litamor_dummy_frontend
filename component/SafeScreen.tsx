@@ -15,7 +15,7 @@ const SafeScreen: React.FC<SafeScreenProps> = ({ children, style }) => {
       style={[
         {
           flex: 1,
-          paddingTop: insets.top,
+         
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,

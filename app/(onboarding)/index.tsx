@@ -65,7 +65,7 @@ const LandingScreen: React.FC = () => {
           { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
         ]}
       >
-        <Text style={styles.logo}>AmorFly 💘</Text>
+        <Text style={styles.logo}>LitAmor 💘</Text>
         <View style={styles.underline} />
         <Text style={styles.subtitle}>
           Find Love, Share Stories & Fly High Together
