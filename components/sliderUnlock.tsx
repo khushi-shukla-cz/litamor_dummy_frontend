@@ -25,7 +25,7 @@ const SimpleSlideUnlock: React.FC<SimpleSlideUnlockProps> = ({
   containerWidth = screenWidth - 40,
 }) => {
   const buttonWidth = 90;
-  const maxSlideDistance = containerWidth - buttonWidth - 20 - 20;
+  const maxSlideDistance = containerWidth - buttonWidth - 8 - 8;
 
   const translateX = useRef(new Animated.Value(0)).current;
   const textOpacity = useRef(new Animated.Value(1)).current;
@@ -70,7 +70,7 @@ const SimpleSlideUnlock: React.FC<SimpleSlideUnlockProps> = ({
               useNativeDriver: false,
             }),
           ]).start(() => {
-            setTimeout(() => onSlideComplete(), 100);
+            setTimeout(() => onSlideComplete(), 10);
           });
         } else {
           // Snap back to start
