@@ -56,8 +56,11 @@ const LandingScreen: React.FC = () => {
   };
   const handleChoice = (type: 'single' | 'couple') => {
     setShowChoice(false);
-    // You can store the choice in state or context if needed
-    router.push("/(tabs)" as Href);
+    if (type === 'couple') {
+      router.push("/(onboarding)/coupleOnboarding" as Href);
+    } else {
+      router.push("/(tabs)" as Href);
+    }
   };
 
   return (
