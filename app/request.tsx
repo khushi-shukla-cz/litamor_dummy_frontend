@@ -5,28 +5,34 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
   Image,
+  Modal,
   SafeAreaView,
   StatusBar,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 
 const ChatScreen = () => {
   // Get params from Expo Router
   const { userId, userName, userAvatar, isOnline } = useLocalSearchParams();
-  
+
   const [showRequest, setShowRequest] = useState(true);
   const [showOptionsMenu, setShowOptionsMenu] = useState(false);
   const [popupType, setPopupType] = useState<'unmatch' | 'block' | 'pin' | null>(null);
+  const [showUnmatchedPopup, setShowUnmatchedPopup] = useState(false);
+
 
   const handleYesMatch = () => {
     setShowRequest(false);
   };
 
   const handleNoThanks = () => {
-    setPopupType('unmatch');
+    // setPopupType('unmatch');
+    setShowUnmatchedPopup(true);  // ✅ this opens the UnmatchedPopup
+
   };
 
   const handleOptionsMenu = () => {
@@ -70,18 +76,18 @@ const ChatScreen = () => {
   return (
     <SafeAreaView className="flex-1">
       <StatusBar barStyle="dark-content" />
-      
+
       {/* Header */}
       <View className="flex-row items-center justify-between px-4 py-4 mt-5 bg-white">
         <TouchableOpacity onPress={handleBackPress}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
-        
+
         <View className="flex-row items-center flex-1 ml-3">
           <View className="w-10 h-10 rounded-full bg-gray-300 mr-3">
             {userAvatar ? (
-              <Image 
-                source={{ uri: userAvatar as string }} 
+              <Image
+                source={{ uri: userAvatar as string }}
                 className="w-full h-full rounded-full"
               />
             ) : (
@@ -97,7 +103,7 @@ const ChatScreen = () => {
             </Text>
           </View>
         </View>
-        
+
         <View className="flex-row items-center">
           <TouchableOpacity className="mr-4">
             <Ionicons name="videocam-outline" size={24} color="#666" />
@@ -109,35 +115,35 @@ const ChatScreen = () => {
             <TouchableOpacity onPress={handleOptionsMenu}>
               <Entypo name="dots-three-vertical" size={24} color="#666" />
             </TouchableOpacity>
-            
+
             {/* Options Menu */}
             {showOptionsMenu && (
               <View className="absolute top-8 right-0 bg-white rounded-2xl shadow-lg py-2 w-48 z-50">
-                <TouchableOpacity 
+                <TouchableOpacity
                   className="flex-row items-center px-4 py-3"
                   onPress={() => handleOptionSelect('unmatch')}
                 >
                   <Ionicons name="close" size={20} color="#666" />
                   <Text className="text-gray-700 text-base ml-3">Unmatch</Text>
                 </TouchableOpacity>
-                
-                <TouchableOpacity 
+
+                <TouchableOpacity
                   className="flex-row items-center px-4 py-3"
                   onPress={() => handleOptionSelect('pin')}
                 >
                   <Ionicons name="pin" size={20} color="#666" />
                   <Text className="text-gray-700 text-base ml-3">Pin</Text>
                 </TouchableOpacity>
-                
-                <TouchableOpacity 
+
+                <TouchableOpacity
                   className="flex-row items-center px-4 py-3"
                   onPress={() => handleOptionSelect('mute')}
                 >
                   <Ionicons name="volume-mute" size={20} color="#666" />
                   <Text className="text-gray-700 text-base ml-3">Mute</Text>
                 </TouchableOpacity>
-                
-                <TouchableOpacity 
+
+                <TouchableOpacity
                   className="flex-row items-center px-4 py-3"
                   onPress={() => handleOptionSelect('block')}
                 >
@@ -174,17 +180,17 @@ const ChatScreen = () => {
               <Text className="text-gray-600 text-center text-base leading-6">
                 Do you wish to match with <Text className="font-semibold">{userName || 'Sebastian'}</Text> to continue the conversation?
               </Text>
-            </View> 
-            
+            </View>
+
             <View className="flex-row justify-center mb-4 px-4">
-              <TouchableOpacity 
+              <TouchableOpacity
                 className="bg-[#666666] rounded-full px-10 py-4 mr-4"
                 onPress={handleYesMatch}
               >
                 <Text className="text-white text-base font-medium">Yes, Match 💕</Text>
               </TouchableOpacity>
-              
-              <TouchableOpacity 
+
+              <TouchableOpacity
                 className="bg-[#D9D9D9] rounded-full px-10 py-4"
                 onPress={handleNoThanks}
               >
@@ -196,16 +202,16 @@ const ChatScreen = () => {
           /* Message Input Area - Shows after matching */
           <View className="bg-[#E6E6E6] pb-20 pt-4 w-full">
             <View className="flex-row items-center px-4">
-              <View className="flex-row items-center bg-[#F5F5F5] rounded-full px-4 py-1 flex-1 mr-3 overflow-hidden" style={{height: 55}}>
+              <View className="flex-row items-center bg-[#F5F5F5] rounded-full px-4 py-1 flex-1 mr-3 overflow-hidden" style={{ height: 55 }}>
                 <TouchableOpacity className="mr-3">
                   <Image source={require('../assets/images/customEmoji.png')} style={{ width: 24, height: 24 }} />
                 </TouchableOpacity>
-                
+
                 <TextInput
                   className="flex-1 text-base text-gray-600"
                   placeholder="Message"
                   placeholderTextColor="#666"
-                  style={{ 
+                  style={{
                     paddingVertical: 8,
                     backgroundColor: 'transparent',
                     borderWidth: 0,
@@ -219,6 +225,17 @@ const ChatScreen = () => {
           </View>
         )}
       </View>
+
+
+      <UnmatchedPopup
+        visible={showUnmatchedPopup}          // 👈 state that controls visibility
+        onClose={() => setShowUnmatchedPopup(false)}
+        onLoveLetter={() => {
+          setShowUnmatchedPopup(false);
+          // router.push("/loveLetter");         // 👈 navigate to LoveLetter screen
+        }}
+        onNoThanks={() => setShowUnmatchedPopup(false)}
+      />
 
       {/* Bottom Navigation */}
       <BottomNavigation activeTab="Message" onTabPress={(tab) => console.log(`Navigating to ${tab}`)} />
@@ -234,4 +251,131 @@ const ChatScreen = () => {
   );
 };
 
+type UnmatchedPopupProps = {
+  visible: boolean;
+  onClose: () => void;
+  onLoveLetter: () => void;
+  onNoThanks: () => void;
+};
+
+const UnmatchedPopup: React.FC<UnmatchedPopupProps> = ({ visible, onClose, onLoveLetter, onNoThanks }) => {
+  return (
+    <Modal
+      visible={visible}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.popupWrapper}>
+          <View style={styles.popup}>
+            {/* Main Content */}
+            <View style={styles.content}>
+              <Text style={styles.mainText}>💔 Oops...They've unmatched you.</Text>
+
+              <Text style={styles.subText}>
+                RIP to this chat 💀... shoot your shot again with a Love Letter 💌
+              </Text>
+            </View>
+
+            {/* Action Buttons */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.loveLetterButton}
+                onPress={onLoveLetter}
+              >
+                <Text style={styles.loveLetterText}>Love Letter 💌</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.noThanksButton}
+                onPress={onNoThanks}
+              >
+                <Text style={styles.noThanksText}>No, Thanks</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
 export default ChatScreen;
+
+const styles = StyleSheet.create({
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  popup: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    paddingBottom: 20,
+  },
+
+  // Content Styles
+  content: {
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  mainText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  subText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 20,
+    paddingHorizontal: 8,
+  },
+
+  // Button Styles
+  popupWrapper: {
+    position: 'absolute',
+    bottom: 67, // adjust this so it sits above BottomNavigation
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+  },
+
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  loveLetterButton: {
+    flex: 1,
+    backgroundColor: '#666666',
+    paddingVertical: 14,
+    borderRadius: 25,
+    alignItems: 'center',
+  },
+  loveLetterText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  noThanksButton: {
+    flex: 1,
+    backgroundColor: '#D9D9D9',
+    paddingVertical: 14,
+    borderRadius: 25,
+    alignItems: 'center',
+  },
+  noThanksText: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+
+});
