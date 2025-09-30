@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, SafeAreaView, Alert } from 'react-native'
 import { ScreenProps } from '../types';
 import { styles } from '../styles';
 
-const RelationshipDurationScreen: React.FC<ScreenProps> = ({ formData, updateFormData }) => {
+const RelationshipDurationScreen: React.FC<ScreenProps> = ({ formData, updateFormData ,nextScreen}) => {
   const options = [
     'Just started dating (0-3 months)',
     'In a steady relationship (3-12 months)',
@@ -40,7 +40,7 @@ const RelationshipDurationScreen: React.FC<ScreenProps> = ({ formData, updateFor
         </View>
         <TouchableOpacity
           style={[styles.button, !formData.relationshipDuration && styles.buttonDisabled]}
-          onPress={handleComplete}
+          onPress={nextScreen}
           disabled={!formData.relationshipDuration}
         >
           <Text style={styles.buttonText}>Complete</Text>

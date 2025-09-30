@@ -16,3 +16,13 @@ export { default as CoupleModeUnlockedScreen } from './CoupleModeUnlockedScreen'
 export { default as LoveStoryQuizScreen } from './LoveStoryQuizScreen';
 export { default as HowMetScreen } from './HowMetScreen';
 export { default as RelationshipDurationScreen } from './RelationshipDurationScreen';
+export { default as LoveStoryQuizScreen1} from './LoveStoryQuizScreen1'
+export { default as LoveStoryQuizScreen2} from './LoveStoryQuizScreen2'
+export { default as LoveStoryQuizScreen3} from './LoveStoryQuizScreen3'
+export { default as LoveStoryQuizScreen4} from './LoveStoryQuizScreen4'
+export { default as LoveStoryQuizScreen5} from './LoveStoryQuizScreen5'
+export { default as LoveStoryQuizScreen6} from './LoveStoryQuizScreen6'
+export { default as LoveStoryQuizScreen7} from './LoveStoryQuizScreen7'
+export { default as LoveStoryQuizScreen8} from './LoveStoryQuizScreen8'
+export { default as LoveStoryQuizScreen9} from './LoveStoryQuizScreen9'
+export { default as LoveStoryQuizScreen10} from './LoveStoryQuizScreen10'
