@@ -1,89 +1,41 @@
-import FireSvg from "@/components/fireSvg";
-import { router } from "expo-router";
-import React from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const RapidFireIntroScreen = () => {
-  const handleStart = () => {
-    // Navigate to the questionnaire screen by its file name
-    router.push("/rapidFire");
-  };
+export default function HomePage() {
+  const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>
-          Get ready for a <Text style={styles.rapidText}>rapid fire</Text> vibe
-          check <FireSvg width={46} height={44} />
-        </Text>
-
-        <Text style={styles.subtitle}>
-          Every answer earns points — the more honest you are, the better your
-          matches will be.
-        </Text>
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <StatusBar style="dark" />
+      <View className="flex-1 justify-center items-center px-8">
+        
+        {/* Buttons Container with consistent width */}
+        <View className="w-full max-w-xs">
+          <TouchableOpacity
+            className="bg-pink-500 px-8 rounded-xl p-3 mb-4 shadow-lg active:bg-pink-600 w-full"
+            onPress={() => router.push('/rapidFireEntry' as any)}
+            activeOpacity={0.8}
+          >
+            <Text className="text-white text-lg font-bold text-center">Rapid Fire</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-pink-500 px-8 rounded-xl p-3 mb-4 shadow-lg active:bg-pink-600 w-full"
+            onPress={() => router.push('/aboutYou' as any)}
+            activeOpacity={0.8}
+          >
+            <Text className="text-white text-lg font-bold text-center">About You</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-pink-500 px-8 rounded-xl p-3 mb-4 shadow-lg active:bg-pink-600 w-full"
+            onPress={() => router.push('/mandatoryQ' as any)}
+            activeOpacity={0.8}
+          >
+            <Text className="text-white text-lg font-bold text-center">Mandatory Questions</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleStart}>
-        <Text style={styles.buttonText}>Let's Go</Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#C6C3BF",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingBottom: 40,
-    paddingHorizontal: 20,
-  },
-  content: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-  title: {
-    fontSize: 48,
-    fontWeight: 400,
-    textAlign: "left",
-    lineHeight: 56,
-    marginBottom: 20,
-    color: "#000000",
-  },
-  rapidText: {
-    fontSize: 48,
-    fontFamily: "Poppins_600SemiBold",
-  },
-
-  subtitle: {
-    fontSize: 18,
-    textAlign: "left",
-    color: "#000000",
-    lineHeight: 26,
-    marginBottom: 40,
-  },
-  button: {
-    backgroundColor: "#6C6C6C",
-    paddingVertical: 18,
-    paddingHorizontal: 20,
-    width: "100%",
-    borderRadius: 20,
-    alignItems: "center",
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
-
-export default RapidFireIntroScreen;
+}
