@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
-  Image,
   ScrollView,
 } from 'react-native';
 import { Video } from 'lucide-react-native';
+import { Href, router } from 'expo-router';
 
 export default function HomeScreen() {
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
@@ -73,6 +73,14 @@ export default function HomeScreen() {
               </TouchableOpacity>
             ))}
           </View>
+
+          {/* Explore Button */}
+          <TouchableOpacity 
+            style={styles.exploreButton}
+            onPress={() => router.push('/amorstreak/explore' as Href)}
+          >
+            <Text style={styles.exploreButtonText}>Explore</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -213,5 +221,26 @@ const styles = StyleSheet.create({
   },
   moodEmoji: {
     fontSize: 24,
+  },
+  exploreButton: {
+    backgroundColor: '#FFA500',
+    paddingHorizontal: 40,
+    paddingVertical: 15,
+    borderRadius: 30,
+    marginTop: 25,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 5,
+  },
+  exploreButtonText: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textAlign: 'center',
   },
 });

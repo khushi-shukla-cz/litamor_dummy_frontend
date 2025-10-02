@@ -1,3 +1,4 @@
+import { Href, router } from 'expo-router';
 import React from 'react';
 import {
   View,
@@ -70,7 +71,9 @@ export default function StreakScreen() {
         </TouchableOpacity>
 
         {/* Continue Button */}
-        <TouchableOpacity style={styles.continueButton}>
+        <TouchableOpacity style={styles.continueButton}
+          onPress={()=>router.push('/amorstreak/message' as Href)}
+        >
           <Text style={styles.continueButtonText}>Continue</Text>
         </TouchableOpacity>
       </View>
@@ -87,47 +90,48 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 60,
+    paddingTop: 40,   // pehle 60 tha, ab 40 kiya
+    justifyContent: 'space-between', // content spread hoga aur button neeche chipak jayega
   },
   fireIcon: {
-    fontSize: 120,
-    marginBottom: 30,
+    fontSize: 100,   // thoda chhota kiya
+    marginBottom: 20,
   },
   streakContainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginBottom: 60,
+    marginBottom: 30,  // pehle 60 tha
   },
   streakNumber: {
-    fontSize: 60,
+    fontSize: 55,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    marginRight: 15,
+    marginRight: 10,
   },
   streakLabel: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '600',
     color: '#FFA500',
   },
   calendarContainer: {
-    marginBottom: 60,
+    marginBottom: 30,  // pehle 60 tha
   },
   weekRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: 280,
-    marginBottom: 15,
+    marginBottom: 10, // thoda kam
   },
   dayLabel: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
     width: 35,
     textAlign: 'center',
   },
   dayNumber: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
     width: 35,
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkMark: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#FFFFFF',
     fontWeight: 'bold',
   },
@@ -155,50 +159,58 @@ const styles = StyleSheet.create({
   },
   encouragementContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 20, // pehle 40 tha
   },
   encouragementText: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 5,
   },
   perfectStreakText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     color: '#FFA500',
     textAlign: 'center',
   },
   fireEmoji: {
-    fontSize: 18,
+    fontSize: 16,
   },
   waitingText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#CCCCCC',
-    marginBottom: 30,
+    marginBottom: 15,
   },
   nudgeButton: {
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 30,
-    paddingVertical: 15,
+    paddingHorizontal: 25,
+    paddingVertical: 12,
     borderRadius: 25,
-    marginBottom: 30,
+    marginBottom: 20, // pehle 30 tha
   },
   nudgeButtonText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: '#333333',
   },
   continueButton: {
-    backgroundColor: 'transparent',
-    paddingHorizontal: 30,
+    backgroundColor: '#FFA500',
+    paddingHorizontal: 40,
     paddingVertical: 15,
-    borderRadius: 25,
-    marginTop: 20,
+    borderRadius: 30,
+    width: '85%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+    marginBottom: 20,  // button screen ke neeche se chipak ke na rahe, halka sa gap
   },
   continueButtonText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#FFFFFF',
+    textAlign: 'center',
   },
 });
