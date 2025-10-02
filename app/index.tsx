@@ -34,6 +34,24 @@ export default function HomePage() {
           >
             <Text className="text-white text-lg font-bold text-center">Mandatory Questions</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+          className="bg-white/80 backdrop-blur-sm rounded-2xl px-10 py-4 shadow-lg border border-gray-200/50"
+          onPress={() => router.push("/screens")}
+          activeOpacity={0.8}
+        >
+          <Text className="text-gray-800 font-semibold text-lg text-center">
+            Todays match
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="bg-white/80 backdrop-blur-sm rounded-2xl px-10 py-4 shadow-lg border border-gray-200/50"
+          onPress={() => router.push("/chat")}
+          activeOpacity={0.8}
+        >
+          <Text className="text-gray-800 font-semibold text-lg text-center">
+            Chat
+          </Text>
+        </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
