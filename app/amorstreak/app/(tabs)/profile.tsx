@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -9,13 +9,8 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import { Video } from 'lucide-react-native';
 
-export default function HomeScreen() {
-  const [selectedMood, setSelectedMood] = useState<number | null>(null);
-
-  const moods = ['😊', '😐', '😔', '💖', '🤩'];
-
+export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
@@ -41,12 +36,6 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          {/* Video Recording Area */}
-          <TouchableOpacity style={styles.videoArea}>
-            <Video size={40} color="#FFFFFF" strokeWidth={1.5} />
-            <Text style={styles.videoText}>Record a Video Note</Text>
-          </TouchableOpacity>
-
           {/* Prompt Section */}
           <View style={styles.promptSection}>
             <Text style={styles.promptLabel}>❤️ Prompt of the Day:</Text>
@@ -56,24 +45,34 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Mood Selection */}
-        <View style={styles.moodSection}>
-          <Text style={styles.moodQuestion}>What's your mood like right now?</Text>
-          <View style={styles.moodGrid}>
-            {moods.map((mood, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.moodButton,
-                  selectedMood === index && styles.selectedMoodButton,
-                ]}
-                onPress={() => setSelectedMood(index)}
-              >
-                <Text style={styles.moodEmoji}>{mood}</Text>
-              </TouchableOpacity>
-            ))}
+        {/* Photo Section */}
+        <View style={styles.photoSection}>
+          <Image
+            source={{ uri: 'https://images.pexels.com/photos/1002703/pexels-photo-1002703.jpeg' }}
+            style={styles.mainPhoto}
+          />
+          
+          <View style={styles.overlayContent}>
+            <View style={styles.profileSection}>
+              <Image
+                source={{ uri: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg' }}
+                style={styles.profileImage}
+              />
+              <Text style={styles.recapText}>✨ Your Love Recap</Text>
+            </View>
+            <View style={styles.rightSection}>
+              <Image
+                source={{ uri: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg' }}
+                style={styles.partnerImage}
+              />
+            </View>
           </View>
         </View>
+
+        {/* Locked Button */}
+        <TouchableOpacity style={styles.lockedButton}>
+          <Text style={styles.lockedButtonText}>🎉 Streak Locked!</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -156,23 +155,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
-  videoArea: {
-    backgroundColor: '#777777',
-    borderRadius: 15,
-    height: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    position: 'relative',
-  },
-  videoText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '500',
-    marginTop: 10,
-  },
   promptSection: {
-    marginTop: 10,
+    marginTop: -10,
   },
   promptLabel: {
     fontSize: 16,
@@ -186,32 +170,64 @@ const styles = StyleSheet.create({
     color: '#333333',
     lineHeight: 26,
   },
-  moodSection: {
-    paddingHorizontal: 20,
-    marginBottom: 30,
+  photoSection: {
+    marginHorizontal: 20,
+    borderRadius: 15,
+    overflow: 'hidden',
+    position: 'relative',
+    height: 400,
+    marginBottom: 20,
   },
-  moodQuestion: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#333333',
-    marginBottom: 15,
+  mainPhoto: {
+    width: '100%',
+    height: '100%',
   },
-  moodGrid: {
+  overlayContent: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
-  moodButton: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#E8E8E8',
-    borderRadius: 30,
-    justifyContent: 'center',
+  profileSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  profileImage: {
+    width: 35,
+    height: 35,
+    borderRadius: 17.5,
+    marginRight: 10,
+  },
+  recapText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  rightSection: {
     alignItems: 'center',
   },
-  selectedMoodButton: {
-    backgroundColor: '#FFE5E5',
+  partnerImage: {
+    width: 35,
+    height: 35,
+    borderRadius: 17.5,
   },
-  moodEmoji: {
-    fontSize: 24,
+  lockedButton: {
+    backgroundColor: '#E8E8E8',
+    marginHorizontal: 20,
+    paddingVertical: 18,
+    borderRadius: 15,
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  lockedButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333333',
   },
 });
