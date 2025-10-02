@@ -1,4 +1,3 @@
-// app/(tabs)/index.tsx
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground, TextInput, Image, Text, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -61,7 +60,7 @@ const ArrowTag = ({ name, icon, onPress, position }) => {
   );
 };
 
-export default function Home() {
+export default function App() {
   const router = useRouter();
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -137,24 +136,7 @@ export default function Home() {
 
   const handleEnterPlanet = (planet) => {
     setModalVisible(false);
-    
-    // Navigate to the respective tab based on planet name
-    switch(planet.name) {
-      case "Amor Fly":
-        router.push('/(tabs)/amorFly');
-        break;
-      case "Amor Streak":
-        router.push('/(tabs)/amorStreak');
-        break;
-      case "Lit Score":
-        router.push('/(tabs)/litscore');
-        break;
-      case "Lone Town":
-        router.push('/(tabs)/lonetown');
-        break;
-      default:
-        console.log('Unknown planet:', planet.name);
-    }
+    // Here you would navigate to the planet-specific screen
   };
 
   return (

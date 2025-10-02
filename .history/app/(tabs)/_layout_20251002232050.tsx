@@ -7,7 +7,7 @@ const TabRootLayout: React.FC = () => {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
         tabBarActiveTintColor: "#007AFF",
         tabBarInactiveTintColor: "gray",
         tabBarStyle: {

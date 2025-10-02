@@ -1,4 +1,3 @@
-// app/_layout.tsx
 import React from "react";
 import SafeScreen from "@/component/SafeScreen";
 import { Stack } from "expo-router";

@@ -17,13 +17,13 @@ const TabRootLayout: React.FC = () => {
         },
       }}
     >
-      {/* Home Tab - This will now show the planet screen */}
+      {/* Home Tab */}
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="planet-outline" size={size} color={color} />
+            <Ionicons name="home-outline" size={size} color={color} />
           ),
         }}
       />

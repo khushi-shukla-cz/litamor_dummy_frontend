@@ -22,9 +22,6 @@ const TabRootLayout: React.FC = () => {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="planet-outline" size={size} color={color} />
-          ),
         }}
       />
 

@@ -1,7 +1,7 @@
 // Helper to render partner icon in monthly view
 const PartnerIcon = ({ size = 32, style = {} }) => (
   <Image
-    source={require('../../assets/male.png')}
+    source={require('./assets/icons/male.png')}
     style={[
       {
         width: size,
@@ -31,7 +31,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import Icon from '../../component/Icon';
+import Icon from './component/Icon';
 
 const { width } = Dimensions.get('window');
 
@@ -126,7 +126,7 @@ const CouplesApp = () => {
       <View style={styles.avatarCircle}>
           {avatar === 'female' ? (
             <Image
-              source={require('../../assets/female.png')}
+              source={require('./assets/icons/female.png')}
               style={{
                 width: 80,
                 height: 80,
@@ -138,7 +138,7 @@ const CouplesApp = () => {
             />
           ) : avatar === 'male' ? (
             <Image
-              source={require('../../assets/male.png')}
+              source={require('./assets/icons/male.png')}
               style={styles.avatarIconFilled}
             />
           ) : (
@@ -162,7 +162,7 @@ const CouplesApp = () => {
           <View style={styles.partnerInfo}>
             <View style={styles.partnerAvatar}>
               <Image
-                source={require('../../assets/partner.png')}
+                source={require('./assets/icons/partner.png')}
                 style={{
                   width: 32,
                   height: 32,

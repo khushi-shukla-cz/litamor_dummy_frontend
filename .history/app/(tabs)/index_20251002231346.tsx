@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Svg, { Ellipse } from 'react-native-svg';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Planet Details Component
 const PlanetDetails = ({ visible, planet, onClose, onEnter }) => {
@@ -158,177 +159,185 @@ export default function Home() {
   };
 
   return (
-    <View style={styles.container}>
-      <ImageBackground 
-        source={{ uri: 'https://i.ibb.co/kV5QknDR/2ce45e46d9227b923966a63de02db7d479400288.jpg' }}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-      >
-        <View style={styles.overlay}>
-        {/* Search Input */}
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Enter a New World"
-            placeholderTextColor="white"
-          />
-        </View>
-
-        {/* Ellipses in background */}
-        <Svg height="500" width="500" style={styles.ellipseSvg}>
-          <Ellipse
-            cx="220"
-            cy="230"
-            rx="110"
-            ry="90"
-            stroke="rgba(255,255,255,0.25)"
-            strokeWidth="1.5"
-            fill="none"
-          />
-        </Svg>
-        <Svg height="550" width="550" style={styles.ellipseSvg2}>
-          <Ellipse
-            cx="160"
-            cy="170"
-            rx="220"
-            ry="130"
-            stroke="rgba(255,255,255,0.25)"
-            strokeWidth="1.5"
-            fill="none"
-          />
-        </Svg>
-
-        {/* Central Planet */}
-        <View style={styles.earthbg}>
-          <Image 
-            source={{ uri: 'https://i.ibb.co/7JTBFBMP/bbc451bb52c9fa9e891221f09db5ca78f4e01882.png' }}
-            style={styles.earthImage}
-          />
-        </View>
-
-        {/* Planets with touchable wrappers - Only 4 planets */}
-        {/* Below earth right big planet - Amor Streak */}
-        <TouchableOpacity 
-          style={[styles.planet1Container, { top: 485, right: 20 }]}
-          onPress={() => handlePlanetPress('amorStreak')}
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+      <View style={styles.container}>
+        <ImageBackground 
+          source={{ uri: 'https://i.ibb.co/kV5QknDR/2ce45e46d9227b923966a63de02db7d479400288.jpg' }}
+          style={styles.backgroundImage}
+          resizeMode="cover"
         >
-          <Image source={{ uri: planets.amorStreak.image }} style={styles.planet1Image} />
-        </TouchableOpacity>
+          <View style={styles.overlay}>
+            {/* Search Input */}
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Enter a New World"
+                placeholderTextColor="white"
+              />
+            </View>
 
-        {/* Below earth left big planet - Lit Score */}
-        <TouchableOpacity 
-          style={[styles.planet2Container, { top: 590, left: 50 }]}
-          onPress={() => handlePlanetPress('litScore')}
-        >
-          <Image source={{ uri: planets.litScore.image }} style={styles.planet2Image} />
-        </TouchableOpacity>
+            {/* Ellipses in background */}
+            <Svg height="500" width="500" style={styles.ellipseSvg}>
+              <Ellipse
+                cx="220"
+                cy="230"
+                rx="110"
+                ry="90"
+                stroke="rgba(255,255,255,0.25)"
+                strokeWidth="1.5"
+                fill="none"
+              />
+            </Svg>
+            <Svg height="550" width="550" style={styles.ellipseSvg2}>
+              <Ellipse
+                cx="160"
+                cy="170"
+                rx="220"
+                ry="130"
+                stroke="rgba(255,255,255,0.25)"
+                strokeWidth="1.5"
+                fill="none"
+              />
+            </Svg>
 
-        {/* Above earth right small planet - Amor Fly */}
-        <TouchableOpacity 
-          style={[styles.planet3Container, { top: 280, right: 40 }]}
-          onPress={() => handlePlanetPress('amorFly')}
-        >
-          <Image source={{ uri: planets.amorFly.image }} style={styles.planet3Image} />
-        </TouchableOpacity>
+            {/* Central Planet */}
+            <View style={styles.earthbg}>
+              <Image 
+                source={{ uri: 'https://i.ibb.co/7JTBFBMP/bbc451bb52c9fa9e891221f09db5ca78f4e01882.png' }}
+                style={styles.earthImage}
+              />
+            </View>
 
-        {/* Above earth left small planet - Lone Town */}
-        <TouchableOpacity 
-          style={[styles.planet4Container, { top: 385, left: 20 }]}
-          onPress={() => handlePlanetPress('loneTown')}
-        >
-          <Image source={{ uri: planets.loneTown.image }} style={styles.planet4Image} />
-        </TouchableOpacity>
+            {/* Planets with touchable wrappers - Only 4 planets */}
+            {/* Below earth right big planet - Amor Streak */}
+            <TouchableOpacity 
+              style={[styles.planet1Container, { top: 485, right: 20 }]}
+              onPress={() => handlePlanetPress('amorStreak')}
+            >
+              <Image source={{ uri: planets.amorStreak.image }} style={styles.planet1Image} />
+            </TouchableOpacity>
 
-        {/* Arrow Tags for Planets */}
-        {showTag === 'amorStreak' && (
-          <ArrowTag 
-            name="Amor Streak"
-            icon={planets.amorStreak.icon}
-            onPress={() => handleTagPress('amorStreak', 'planet')}
-            position={{ top: 610, right: 20 }}
-          />
-        )}
-        
-        {showTag === 'litScore' && (
-          <ArrowTag 
-            name="Lit Score"
-            icon={planets.litScore.icon}
-            onPress={() => handleTagPress('litScore', 'planet')}
-            position={{ top: 700, left: 50 }}
-          />
-        )}
-        
-        {showTag === 'amorFly' && (
-          <ArrowTag 
-            name="Amor Fly"
-            icon={planets.amorFly.icon}
-            onPress={() => handleTagPress('amorFly', 'planet')}
-            position={{ top: 355, right: 0 }}
-          />
-        )}
-        
-        {showTag === 'loneTown' && (
-          <ArrowTag 
-            name="Lone Town"
-            icon={planets.loneTown.icon}
-            onPress={() => handleTagPress('loneTown', 'planet')}
-            position={{ top: 450, left: 0 }}
-          />
-        )}
+            {/* Below earth left big planet - Lit Score */}
+            <TouchableOpacity 
+              style={[styles.planet2Container, { top: 590, left: 50 }]}
+              onPress={() => handlePlanetPress('litScore')}
+            >
+              <Image source={{ uri: planets.litScore.image }} style={styles.planet2Image} />
+            </TouchableOpacity>
 
-        {/* Bonus Stars */}
-        {/* Star bottom right to earth - Dates written in the stars */}
-        <TouchableOpacity 
-          style={[styles.starContainer, { top: 410, right: 50 }]}
-          onPress={() => handleStarPress('datesInStars')}
-        >
-          <Image source={{ uri: stars.earnXP.image }} style={styles.starImage} />
-        </TouchableOpacity>
-        
-        {/* Star top left to earth - Earn XP */}
-        <TouchableOpacity 
-          style={[styles.starContainer, { top: 495, left: 80 }]}
-          onPress={() => handleStarPress('earnXP')}
-        >
-          <Image source={{ uri: stars.earnXP.image }} style={styles.starImage} />
-        </TouchableOpacity>
+            {/* Above earth right small planet - Amor Fly */}
+            <TouchableOpacity 
+              style={[styles.planet3Container, { top: 280, right: 40 }]}
+              onPress={() => handlePlanetPress('amorFly')}
+            >
+              <Image source={{ uri: planets.amorFly.image }} style={styles.planet3Image} />
+            </TouchableOpacity>
 
-        {/* Arrow Tags for Stars */}
-        {showTag === 'datesInStars' && (
-          <ArrowTag 
-            name="Dates in Stars"
-            icon={stars.datesInStars.icon}
-            onPress={() => handleTagPress('datesInStars', 'star')}
-            position={{ top: 460, right: 0 }}
-          />
-        )}
-        
-        {showTag === 'earnXP' && (
-          <ArrowTag 
-            name="Earn XP"
-            icon={stars.earnXP.icon}
-            onPress={() => handleTagPress('earnXP', 'star')}
-            position={{ top: 550, left: 50 }}
-          />
-        )}
+            {/* Above earth left small planet - Lone Town */}
+            <TouchableOpacity 
+              style={[styles.planet4Container, { top: 385, left: 20 }]}
+              onPress={() => handlePlanetPress('loneTown')}
+            >
+              <Image source={{ uri: planets.loneTown.image }} style={styles.planet4Image} />
+            </TouchableOpacity>
 
-        {/* Planet Details Modal */}
-        <PlanetDetails
-          visible={modalVisible}
-          planet={selectedPlanet}
-          onClose={handleCloseModal}
-          onEnter={handleEnterPlanet}
-        />
+            {/* Arrow Tags for Planets */}
+            {showTag === 'amorStreak' && (
+              <ArrowTag 
+                name="Amor Streak"
+                icon={planets.amorStreak.icon}
+                onPress={() => handleTagPress('amorStreak', 'planet')}
+                position={{ top: 610, right: 20 }}
+              />
+            )}
+            
+            {showTag === 'litScore' && (
+              <ArrowTag 
+                name="Lit Score"
+                icon={planets.litScore.icon}
+                onPress={() => handleTagPress('litScore', 'planet')}
+                position={{ top: 700, left: 50 }}
+              />
+            )}
+            
+            {showTag === 'amorFly' && (
+              <ArrowTag 
+                name="Amor Fly"
+                icon={planets.amorFly.icon}
+                onPress={() => handleTagPress('amorFly', 'planet')}
+                position={{ top: 355, right: 0 }}
+              />
+            )}
+            
+            {showTag === 'loneTown' && (
+              <ArrowTag 
+                name="Lone Town"
+                icon={planets.loneTown.icon}
+                onPress={() => handleTagPress('loneTown', 'planet')}
+                position={{ top: 450, left: 0 }}
+              />
+            )}
 
-        <StatusBar style="light" />
-        </View>
-      </ImageBackground>
-    </View>
+            {/* Bonus Stars */}
+            {/* Star bottom right to earth - Dates written in the stars */}
+            <TouchableOpacity 
+              style={[styles.starContainer, { top: 410, right: 50 }]}
+              onPress={() => handleStarPress('datesInStars')}
+            >
+              <Image source={{ uri: stars.earnXP.image }} style={styles.starImage} />
+            </TouchableOpacity>
+            
+            {/* Star top left to earth - Earn XP */}
+            <TouchableOpacity 
+              style={[styles.starContainer, { top: 495, left: 80 }]}
+              onPress={() => handleStarPress('earnXP')}
+            >
+              <Image source={{ uri: stars.earnXP.image }} style={styles.starImage} />
+            </TouchableOpacity>
+
+            {/* Arrow Tags for Stars */}
+            {showTag === 'datesInStars' && (
+              <ArrowTag 
+                name="Dates in Stars"
+                icon={stars.datesInStars.icon}
+                onPress={() => handleTagPress('datesInStars', 'star')}
+                position={{ top: 460, right: 0 }}
+              />
+            )}
+            
+            {showTag === 'earnXP' && (
+              <ArrowTag 
+                name="Earn XP"
+                icon={stars.earnXP.icon}
+                onPress={() => handleTagPress('earnXP', 'star')}
+                position={{ top: 550, left: 50 }}
+              />
+            )}
+
+            {/* Planet Details Modal */}
+            <PlanetDetails
+              visible={modalVisible}
+              planet={selectedPlanet}
+              onClose={handleCloseModal}
+              onEnter={handleEnterPlanet}
+            />
+
+            <StatusBar style="light" />
+          </View>
+        </ImageBackground>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  container: { 
+    flex: 1,
+  },
   backgroundImage: { 
     flex: 1, 
     width: '100%', 
@@ -348,6 +357,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     height: 50,
     justifyContent: 'center',
+    zIndex: 10,
   },
   searchInput: {
     flex: 1,
