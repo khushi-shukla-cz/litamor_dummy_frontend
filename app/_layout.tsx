@@ -1,30 +1,3 @@
-// import { Stack } from "expo-router";
-// import { StatusBar } from "expo-status-bar";
-// import React from "react";
-// import { SafeAreaProvider } from "react-native-safe-area-context";
-// import SafeScreen from "../components/SafeScreen"; // Assuming this path is correct
-// import {
-//   useFonts,
-//   Poppins_400Regular,
-//   Poppins_600SemiBold,
-//   Poppins_700Bold,
-// } from "@expo-google-fonts/poppins";
-// index.preventAutoHideAsync();
-// export default function RootLayout() {
-//   return (
-//     <SafeAreaProvider>
-//       <SafeScreen>
-//         <Stack screenOptions={{ headerShown: false }}>
-//           {/* These lines tell the navigator about your screens */}
-//           <Stack.Screen name="index" />
-//           <Stack.Screen name="rapidFire" />
-//         </Stack>
-//       </SafeScreen>
-//       <StatusBar style="dark" />
-//     </SafeAreaProvider>
-//   );
-// }
-
 import {
   Poppins_100Thin,
   Poppins_200ExtraLight,
@@ -43,6 +16,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useCallback } from "react";
 import { Text } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import "../global.css";
 
 import SafeScreen from "../components/SafeScreen"; // Adjust path if needed
 

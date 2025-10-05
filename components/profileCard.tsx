@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Rect } from "react-native-svg";
-import { User } from "../mockData/data";
+import { User } from "../mockData/loneTownData";
 import { ChevronDownIcon, ChevronUpIcon } from "./chevron";
 import MatchPill from "./matchPill";
 
@@ -232,7 +232,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 
       {/* Action Buttons */}
       <View style={styles.cardActions}>
-        <TouchableOpacity style={styles.chatButton} onPress={() => router.push("/request")}>
+        <TouchableOpacity style={styles.chatButton} onPress={() => router.push('/request')}>
           <Text style={styles.chatButtonText}>Start a Chat</Text>
         </TouchableOpacity>
         {isPremium && (

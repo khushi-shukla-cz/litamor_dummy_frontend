@@ -200,7 +200,7 @@ const ChatScreen = () => {
         <View className="flex-row items-center px-4">
           <View className="flex-row items-center bg-[#F5F5F5] rounded-full px-4 py-1 flex-1 mr-3 overflow-hidden" style={{ height: 55 }}>
             <TouchableOpacity className="mr-3">
-              <Image source={require('../assets/images/customEmoji.png')} style={{ width: 24, height: 24 }} />
+              <Image source={require('../../assets/images/customEmoji.png')} style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
 
             <TextInput

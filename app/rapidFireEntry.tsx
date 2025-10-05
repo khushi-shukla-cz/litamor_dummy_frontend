@@ -1,17 +1,17 @@
 import FireSvg from "@/components/fireSvg";
 import { router } from "expo-router";
 import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const RapidFireIntroScreen = () => {
   const handleStart = () => {
     // Navigate to the questionnaire screen by its file name
-    router.push("/rapidFire");
+    router.push("./rapidFire");
   };
 
   return (
